@@ -49,19 +49,18 @@ class _LoginPageState extends State<LoginPage> {
               height: 60,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _changeLanguage(const Locale('en', 'US'));
+                Text('English'),
+                Switch(
+                  value: currentLocale == const Locale('en', 'US'),
+                  onChanged: (newValue) {
+                    _changeLanguage(newValue
+                        ? const Locale('en', 'US')
+                        : const Locale('fr', 'FR'));
                   },
-                  child: Text('English'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    _changeLanguage(const Locale('fr', 'FR'));
-                  },
-                  child: Text('Français'),
-                ),
+                Text('Français'),
               ],
             ),
             const SizedBox(
