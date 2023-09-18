@@ -48,21 +48,6 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 60,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('English'),
-                Switch(
-                  value: currentLocale == const Locale('en', 'US'),
-                  onChanged: (newValue) {
-                    _changeLanguage(newValue
-                        ? const Locale('en', 'US')
-                        : const Locale('fr', 'FR'));
-                  },
-                ),
-                Text('Français'),
-              ],
-            ),
             const SizedBox(
               height: 20,
             ),
@@ -159,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
