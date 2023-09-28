@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
   Locale currentLocale =
-      const Locale('en', 'US'); // Langue par défaut : anglais
+      const Locale('fr', 'FR'); // Langue par défaut : anglais
 
   void _changeLanguage(Locale newLocale) {
     setState(() {

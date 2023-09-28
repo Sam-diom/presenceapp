@@ -1,6 +1,8 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:presenceapp/bdHelper/mongoBdConnect.dart';
 import 'package:presenceapp/login_screen.dart';
+import 'package:presenceapp/mongodbModel.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key, required this.title}) : super(key: key);
@@ -13,6 +15,10 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'Sign up',
+              'Inscription',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 40,
@@ -42,12 +48,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     children: [
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
+                          controller: _firstNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer votre prénom';
+                            }
+                            return null;
+                          },
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: 'First name',
+                            hintText: 'Prénom',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -60,12 +70,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       Expanded(
                         child: TextFormField(
-                          validator: (value) => EmailValidator.validate(value!)
-                              ? null
-                              : "Please enter a valid email",
+                          controller: _lastNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Veuillez entrer votre nom';
+                            }
+                            return null;
+                          },
                           maxLines: 1,
                           decoration: InputDecoration(
-                            hintText: 'Last name',
+                            hintText: 'Nom',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -79,12 +93,17 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
-                    validator: (value) => EmailValidator.validate(value!)
-                        ? null
-                        : "Please enter a valid email",
+                    controller: _emailController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer votre e-mail';
+                      }
+                      // Ajoutez ici votre validation d'e-mail si nécessaire
+                      return null;
+                    },
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: 'Enter your email',
+                      hintText: 'Entrez votre e-mail',
                       prefixIcon: const Icon(Icons.email),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -95,9 +114,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Veuillez entrer votre mot de passe';
                       }
                       return null;
                     },
@@ -105,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      hintText: 'Enter your password',
+                      hintText: 'Entrez votre mot de passe',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -116,13 +136,28 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
+                      if (_formKey.currentState!.validate()) {
+                        // Le formulaire est valide, vous pouvez ajouter votre logique de traitement ici
+                        _insertData(
+                          _firstNameController.text,
+                          _lastNameController.text,
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(
+                                title: 'Interface de connexion'),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),
                     child: const Text(
-                      'Sign up',
+                      'Inscription',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -134,18 +169,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('Already registered?'),
+                      const Text('Déjà inscrit ?'),
                       TextButton(
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  const LoginPage(title: 'Login UI'),
+                              builder: (context) => const LoginPage(
+                                  title: 'Interface de connexion'),
                             ),
                           );
                         },
-                        child: const Text('Sign in'),
+                        child: const Text('Se connecter'),
                       ),
                     ],
                   ),
@@ -156,5 +191,34 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _insertData(
+      String firstName, String lastName, String email, String password) async {
+    var _id =
+        mongo.ObjectId(); // Génère un nouvel ObjectId pour l'ID de l'objet
+    var created = DateTime.now(); // Récupère la date et l'heure actuelles
+    final data = MongoModel.createNew(
+      id: _id,
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+      created:
+          created, // Utilise la date et l'heure actuelles comme date de création
+    );
+    var result = await MongoDatabase.insert(
+        data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("ID inséré: " + _id.toHexString())));
+    // Affiche une notification avec l'ID inséré
+    _clearAll();
+  }
+
+  void _clearAll() {
+    _firstNameController.clear();
+    _lastNameController.clear();
+    _emailController.clear();
+    _passwordController.clear();
   }
 }

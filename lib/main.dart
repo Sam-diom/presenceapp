@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presenceapp/login_screen.dart';
-import 'app_localizations.dart'; 
+import 'app_localizations.dart';
+import 'bdHelper/mongoBdConnect.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoDatabase.connect();
   runApp(const MyApp());
 }
 
@@ -18,7 +21,7 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        AppLocalizations.delegate, 
+        AppLocalizations.delegate,
       ],
       supportedLocales: [
         const Locale('en', 'US'), // Anglais
