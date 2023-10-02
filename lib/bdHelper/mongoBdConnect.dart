@@ -6,10 +6,10 @@ import 'package:presenceapp/mongodbModel.dart';
 class MongoDatabase {
   static var db, userCollection;
   static connect() async {
-    db = await Db.create(MONGO_CONN_URL);
-    await db.open();
-    inspect(db);
-    userCollection = db.collection(USER_COLLECTION);
+    db = await Db.create(MONGO_CONN_URL); //creation de l'instance de base de donnée
+    await db.open(); //ouvrir 
+    inspect(db);// joue le rôle de print
+    userCollection = db.collection(USER_COLLECTION); 
   }
 
   static Future<String> insert(MongoModel data) async {
