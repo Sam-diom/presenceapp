@@ -45,33 +45,55 @@ class _LoginPageState extends State<LoginPage> {
         });
     if (_formKey.currentState!.validate()) {
       await for (var snapshots in MongoDatabase.userCollection.find()) {
-        try {
-          if ((snapshots["email"] == controllerEmail1.text) &&
-              (snapshots["password"] == controllerPassword1.text)) {
-            Navigator.pop(context);
+        if ((snapshots["email"] == controllerEmail1.text) &&
+            (snapshots["password"] == controllerPassword1.text)) {
+          Navigator.pop(context);
 
-            MaterialPageRoute route = MaterialPageRoute(
-                builder: (context) => MongoDbDisplay(
-                      userConnect: userConnect,
-                    ));
-            Navigator.pushReplacement(context, route);
-            print(snapshots["email"]);
-            print(snapshots["password"]);
+          MaterialPageRoute route = MaterialPageRoute(
+              builder: (context) => MongoDbDisplay(
+                    userConnect: userConnect,
+                  ));
+          Navigator.pushReplacement(context, route);
+          print(snapshots["email"]);
+          print(snapshots["password"]);
 
-            setState(() {
-              controllerEmail.text = "";
-              controllerPassword.text = "";
-              userConnect = snapshots["lastName"];
-            });
-          }
-        } catch (e) {
+          setState(() {
+            controllerEmail.text = "";
+            controllerPassword.text = "";
+            userConnect = snapshots["lastName"];
+          });
+        } else if ((snapshots["email"] != controllerEmail1.text) &&
+            (snapshots["password"] == controllerPassword1.text)) {
+          print("Une erreur est survenu");
           Navigator.pop(context);
 
           showDialog(
             context: context,
             builder: (context) {
               return const AlertDialog(
-                content: Text("Identifiant incorrect"),
+                content: Text("Email incorrect, veillez réessayer"),
+              );
+            },
+          );
+        } else if ((snapshots["password"] != controllerPassword1.text) &&
+            (snapshots["email"] == controllerEmail1.text)) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const AlertDialog(
+                content: Text("Password incorrect, veillez réessayer"),
+              );
+            },
+          );
+        } else {
+          print("Une erreur est survenu veillez réessayer");
+          Navigator.pop(context);
+
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const AlertDialog(
+                content: Text("Identifiant incorrect, veillez réessayer"),
               );
             },
           );
