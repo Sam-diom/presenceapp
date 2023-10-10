@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presenceapp/login_screen.dart';
+import 'package:presenceapp/screens/homePage.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 
@@ -29,11 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-      theme: ThemeData(
-        // Vous pouvez ajouter votre palette de couleurs ici
-        primarySwatch: Colors.blue,
-      ),
-      home: const LoginPage(title: 'MyPresence'),
+      home: HomePage(),
     );
   }
 }
