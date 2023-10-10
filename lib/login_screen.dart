@@ -15,6 +15,9 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
   var rememberValue = false;
   Locale currentLocale =
       const Locale('fr', 'FR'); // Langue par défaut : anglais
@@ -23,6 +26,17 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       currentLocale = newLocale;
     });
+  }
+
+  void _connection(String email, String password) async {
+    try {
+      if ((email != "") && (password != "")) {
+        print('EMAIL : $email');
+        print('MOT DE PASSE : $password');
+      } else {
+        print("L'ADRESSE EMAIL OU LE MOT DE PASSE NE DOIT PAS ETRE VIDE !");
+      }
+    } catch (error) {}
   }
 
   @override
@@ -56,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _email,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
                         : appLocalizations.translate('validEmailMessage'),
@@ -72,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _password,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return appLocalizations.translate('enterPasswordHint');
@@ -137,8 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           );
                         },
-                        child:
-                            Text(appLocalizations.translate('createAccount')),
+                        child: Text(
+                          appLocalizations.translate('createAccount'),
+                        ),
                       ),
                     ],
                   ),
