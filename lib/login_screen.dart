@@ -2,6 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:presenceapp/app_localizations.dart';
 import 'package:presenceapp/register_screen.dart';
+import 'package:presenceapp/homePage.dart'; // Importez votre page d'accueil
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
+import 'package:presenceapp/mongodbModel.dart';
 
 const String registerPageTitle = 'Register UI';
 
@@ -19,10 +22,49 @@ class _LoginPageState extends State<LoginPage> {
   Locale currentLocale =
       const Locale('fr', 'FR'); // Langue par défaut : anglais
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   void _changeLanguage(Locale newLocale) {
     setState(() {
       currentLocale = newLocale;
     });
+  }
+
+  Future<bool> authenticateUser(String email, String password) async {
+    // Effectuez une recherche dans la base de données pour trouver l'utilisateur par e-mail
+    final user = await getUserByEmail(email);
+
+    if (user != null && user.password == password) {
+      return true; // Authentification réussie
+    } else {
+      return false; // Authentification échouée
+    }
+  }
+
+  // Simulez une fonction pour obtenir un utilisateur par e-mail depuis votre base de données
+  Future<MongoModel?> getUserByEmail(String email) async {
+    try {
+      final db = mongo.Db(
+          "mongodb://samdiom001:yJWnchQPIDJeWK7y@cluster0.vdz4m2r.mongodb.net");
+
+      await db.open();
+
+      final userCollection = db.collection('users');
+
+      final userDocument =
+          await userCollection.findOne(mongo.where.eq('email', email));
+
+      if (userDocument != null) {
+        final user = MongoModel.fromMap(userDocument);
+        return user;
+      }
+
+      return null; // Aucun utilisateur trouvé avec cet e-mail
+    } catch (e) {
+      print('Erreur lors de la recherche de l\'utilisateur par e-mail : $e');
+      return null;
+    }
   }
 
   @override
@@ -56,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: _emailController,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
                         : appLocalizations.translate('validEmailMessage'),
@@ -72,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: _passwordController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return appLocalizations.translate('enterPasswordHint');
@@ -88,25 +132,32 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  CheckboxListTile(
-                    title: Text(appLocalizations.translate('rememberMe') ?? ''),
-                    contentPadding: EdgeInsets.zero,
-                    value: rememberValue,
-                    activeColor: Theme.of(context).colorScheme.primary,
-                    onChanged: (newValue) {
-                      setState(() {
-                        rememberValue = newValue!;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
                   const SizedBox(
-                    height: 20,
+                    height: 40,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Ajoutez la logique de connexion ici
+                        final email = _emailController.text;
+                        final password = _passwordController.text;
+
+                        if (await authenticateUser(email, password)) {
+                          // Authentification réussie, rediriger vers la page d'accueil
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage(), // Remplacez par votre page d'accueil
+                            ),
+                          );
+                        } else {
+                          // Afficher un message d'erreur si l'authentification échoue
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Identifiants incorrects"),
+                            ),
+                          );
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(
