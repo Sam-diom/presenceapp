@@ -1,9 +1,14 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+
 import 'package:presenceapp/app_localizations.dart';
 import 'package:presenceapp/register_screen.dart';
 
+import 'bdHelper/mongoBdConnect.dart';
+import 'utils/afficher_les_donnees.dart';
+
 const String registerPageTitle = 'Register UI';
+final _formKey = GlobalKey<FormState>();
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.title}) : super(key: key);
@@ -14,7 +19,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
+  String userConnect = "";
+  late TextEditingController controllerEmail;
+  late TextEditingController controllerPassword;
   var rememberValue = false;
   Locale currentLocale =
       const Locale('fr', 'FR'); // Langue par défaut : anglais
@@ -24,6 +31,86 @@ class _LoginPageState extends State<LoginPage> {
       currentLocale = newLocale;
     });
   }
+
+  void verif(
+      {required TextEditingController controllerEmail1,
+      required TextEditingController controllerPassword1}) async {
+    final formSate = _formKey.currentState;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+    if (_formKey.currentState!.validate()) {
+      await for (var snapshots in MongoDatabase.userCollection.find()) {
+        try {
+          if ((snapshots["email"] == controllerEmail1.text) &&
+              (snapshots["password"] == controllerPassword1.text)) {
+            Navigator.pop(context);
+
+            MaterialPageRoute route = MaterialPageRoute(
+                builder: (context) => MongoDbDisplay(
+                      userConnect: userConnect,
+                    ));
+            Navigator.pushReplacement(context, route);
+            print(snapshots["email"]);
+            print(snapshots["password"]);
+
+            setState(() {
+              controllerEmail.text = "";
+              controllerPassword.text = "";
+              userConnect = snapshots["lastName"];
+            });
+          }
+        } catch (e) {
+          Navigator.pop(context);
+
+          showDialog(
+            context: context,
+            builder: (context) {
+              return const AlertDialog(
+                content: Text("Identifiant incorrect"),
+              );
+            },
+          );
+        }
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //verif();
+    controllerEmail = TextEditingController();
+    controllerPassword = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controllerEmail.dispose();
+    controllerPassword.dispose();
+  }
+
+  /* 
+  import 'package:mongo_dart/mongo_dart.dart';
+
+void main() async {
+  final db = await Db.create('mongodb://localhost:27017/mydb');
+  await db.open();
+  final collection = db.collection('mycollection');
+  await for (var doc in collection.find()) {
+    // Votre code ici
+  }
+  await db.close();
+}
+
+   */
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 children: [
                   TextFormField(
+                    controller: controllerEmail,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
                         : appLocalizations.translate('validEmailMessage'),
@@ -72,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   TextFormField(
+                    controller: controllerPassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return appLocalizations.translate('enterPasswordHint');
@@ -105,9 +194,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Ajoutez la logique de connexion ici
-                      }
+                      // Ajoutez la logique de connexion ici
+
+                      verif(
+                          controllerEmail1: controllerEmail,
+                          controllerPassword1: controllerPassword);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
