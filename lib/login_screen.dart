@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:presenceapp/app_localizations.dart';
 import 'package:presenceapp/register_screen.dart';
-import 'package:presenceapp/homePage.dart'; // Importez votre page d'accueil
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
-import 'package:presenceapp/mongodbModel.dart';
+import 'package:presenceapp/screens/homePage.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
 import 'utils/afficher_les_donnees.dart';
@@ -14,6 +12,7 @@ const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
 
 class LoginPage extends StatefulWidget {
+  static const String id = 'login';
   const LoginPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
@@ -56,9 +55,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pop(context);
 
           MaterialPageRoute route = MaterialPageRoute(
-              builder: (context) => MongoDbDisplay(
-                    userConnect: userConnect,
-                  ));
+              builder: (context) => HomePage());
           Navigator.pushReplacement(context, route);
           print(snapshots["email"]);
           print(snapshots["password"]);
