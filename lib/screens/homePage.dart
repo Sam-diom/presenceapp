@@ -31,7 +31,7 @@ List<String> days = [
 ];
 
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 26, 34, 45),
+        backgroundColor: Color.fromARGB(255, 4, 60, 139),
         appBar: AppBar(
           title: const Text('Presence App'),
         ),
