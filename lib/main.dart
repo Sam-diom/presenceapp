@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:presenceapp/register_screen.dart';
 import 'package:presenceapp/screens/homePage.dart';
-import 'package:presenceapp/screens/presenceScreen.dart';
+
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'login_screen.dart';
@@ -21,22 +21,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // ...
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         AppLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('en', 'US'), // Anglais
-        const Locale('fr', 'FR'), // Français
+        Locale('en', 'US'), // Anglais
+        Locale('fr', 'FR'), // Français
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
       initialRoute: LoginPage.id,
       routes: {
-        LoginPage.id:(context)=>LoginPage(title: 'inTime'),
-        RegisterPage.id:(context)=>RegisterPage(title: 'inTime'),
-        HomePage.id:(context)=>HomePage(),
+        LoginPage.id: (context) => const LoginPage(title: 'inTime'),
+        RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
+        HomePage.id: (context) => const HomePage(),
       },
     );
   }

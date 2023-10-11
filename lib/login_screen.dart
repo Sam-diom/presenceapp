@@ -6,7 +6,6 @@ import 'package:presenceapp/register_screen.dart';
 import 'package:presenceapp/screens/homePage.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
-import 'utils/afficher_les_donnees.dart';
 
 const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
@@ -54,8 +53,8 @@ class _LoginPageState extends State<LoginPage> {
             (snapshots["password"] == controllerPassword1.text)) {
           Navigator.pop(context);
 
-          MaterialPageRoute route = MaterialPageRoute(
-              builder: (context) => HomePage());
+          MaterialPageRoute route =
+              MaterialPageRoute(builder: (context) => HomePage());
           Navigator.pushReplacement(context, route);
           print(snapshots["email"]);
           print(snapshots["password"]);
