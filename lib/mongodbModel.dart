@@ -55,4 +55,6 @@ class MongoModel {
         password: password,
         created: DateTime.now());
   }
+
+  static fromMap(Map<String, dynamic> userDocument) {}
 }

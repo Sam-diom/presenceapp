@@ -5,6 +5,7 @@ import 'package:presenceapp/mongodbModel.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class RegisterPage extends StatefulWidget {
+  static const String id = 'register';
   const RegisterPage({Key? key, required this.title}) : super(key: key);
   final String title;
 

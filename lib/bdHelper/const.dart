@@ -1,3 +1,6 @@
 const MONGO_CONN_URL =
-    'mongodb+srv://hermannkiffou:6eAarqEUSZsu21NW@cluster0.yswrarj.mongodb.net/';
-const USER_COLLECTION = 'user';
+    'mongodb+srv://obite:0wHsDZEW2B8ttaKe@cluster0.wjiiykw.mongodb.net/';
+const USER_COLLECTION = 'users';
+
+
+/* 0wHsDZEW2B8ttaKe */
