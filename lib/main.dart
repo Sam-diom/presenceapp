@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presenceapp/login_screen.dart';
-import 'package:presenceapp/screens/homePage.dart';
 import 'package:presenceapp/screens/presenceScreen.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
