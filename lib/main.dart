@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         AppLocalizations.delegate,
       ],
-      supportedLocales: [
+      supportedLocales:const  [
         Locale('en', 'US'), // Anglais
         Locale('fr', 'FR'), // Français
       ],
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.id: (context) => const LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
-        HomePage.id: (context) => const HomePage(),
+        HomePage.id: (context) => const HomePage(userConnect: '',),
       },
     );
   }
