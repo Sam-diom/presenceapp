@@ -9,7 +9,7 @@ class AppLocalizations {
       _AppLocalizationsDelegate();
 
   // Define your localized strings here
-  static Map<String, Map<String, String>> _localizedStrings = {
+  static final Map<String, Map<String, String>> _localizedStrings = {
     'en': {
       'signInTitle': 'Sign in',
       'validEmailMessage': 'Please enter a valid email',
