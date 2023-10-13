@@ -39,14 +39,14 @@ class _LoginPageState extends State<LoginPage> {
   void verif(
       {required TextEditingController controllerEmail1,
       required TextEditingController controllerPassword1}) async {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
     if (_formKey.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
       await for (var snapshots in MongoDatabase.userCollection.find()) {
         if ((snapshots["email"] == controllerEmail1.text) &&
             (snapshots["password"] == controllerPassword1.text)) {
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
             emailConnect = snapshots["email"];
             passwordConnect = snapshots["password"];
 
-            userConnect = snapshots["lastName"];
+            userConnect = snapshots["lastName"] + " " + snapshots["firstName"];
           });
 
           print(emailConnect);
