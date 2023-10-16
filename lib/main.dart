@@ -22,14 +22,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // ...
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         AppLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', 'US'), // Anglais
-        const Locale('fr', 'FR'), // Français
+      supportedLocales: const [
+        Locale('en', 'US'), // Anglais
+        Locale('fr', 'FR'), // Français
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.id: (context) => OnBoarding(),
         RegisterPage.id: (context) => RegisterPage(title: 'inTime'),
-        HomePage.id: (context) => HomePage(),
+        HomePage.id: (context) => HomePage(userConnect: ''),
       },
     );
   }
