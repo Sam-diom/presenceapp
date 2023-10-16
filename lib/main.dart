@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
       title: 'MyPresence',
       initialRoute: LoginPage.id,
       routes: {
-        LoginPage.id:(context)=>LoginPage(title: 'inTime'),
-        RegisterPage.id:(context)=>RegisterPage(title: 'inTime'),
-        HomePage.id:(context)=>HomePage(),
+        LoginPage.id: (context) => OnBoarding(),
+        RegisterPage.id: (context) => RegisterPage(title: 'inTime'),
+        HomePage.id: (context) => HomePage(),
       },
     );
   }
