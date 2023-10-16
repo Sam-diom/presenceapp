@@ -30,6 +30,13 @@ List<String> days = [
   'Samedi',
 ];
 
+List<String> drawerList = [
+  'Mon Compte',
+  'Paramètres',
+  'Justifier une absence',
+  'Partager',
+];
+
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 26, 34, 45),
         appBar: AppBar(
@@ -97,21 +104,62 @@ List<String> days = [
         ),
         ),
         drawer: Drawer(
-          child: DrawerHeader(
-            child: Container(
-              width: 200,
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    child: Icon(Icons.account_balance),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  width: 300,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Color.fromARGB(255, 4, 60, 139),
                   ),
-                  Text('Nafo Noura')
-                ],
+                  padding: EdgeInsets.all(10),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 45,
+                        child: Icon(Icons.account_circle),
+                      ),
+                      SizedBox(height: 20,),
+                      Text(
+                        'Nafo Noura',
+                        style: TextStyle(
+                          fontSize: 20
+                        ),
+                        ),
+                    ],
+                  ),
+              
+                ),
               ),
-
-            )
-            ),
+              Expanded(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: ListView.separated(
+                    itemBuilder: (BuildContext context, int index){
+                      return Container(
+                        child: ListTile(
+                          title: Text(drawerList[index]),
+                          trailing: IconButton(
+                            onPressed: (){},
+                            icon: Icon(Icons.arrow_forward_ios),
+                            ),
+                        )
+                      );
+                    }, 
+                    separatorBuilder: (BuildContext context, int index){
+                       return Divider();
+                    }, 
+                    itemCount: drawerList.length
+                    ),
+                ),
+              )
+            ],
+          ),
         ),
         bottomNavigationBar: Container(
           height: 80,
@@ -130,7 +178,7 @@ List<String> days = [
                 label: 'Accueil'),
               BottomNavigationBarItem(
                 icon: Icon(Icons.qr_code),
-                label: 'Scanner'),
+                label: 'QR code'),
             ]
             ),
         ),
