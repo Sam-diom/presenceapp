@@ -86,25 +86,17 @@ class _LoginPageState extends State<LoginPage> {
           controllerEmail.text = "";
           controllerPassword.text = "";
         });
-      } else if (emailConnect == controllerEmail1.text &&
-          passwordConnect != controllerPassword1.text) {
+      } else if ((emailConnect == controllerEmail1.text &&
+              passwordConnect != controllerPassword1.text) ||
+          (emailConnect != controllerEmail1.text &&
+              passwordConnect == controllerPassword1.text)) {
         Navigator.pop(context);
         showDialog(
           context: context,
           builder: (context) {
             return const AlertDialog(
-              content: Text("Password incorrect, veillez réessayer svp!"),
-            );
-          },
-        );
-      } else if (emailConnect != controllerEmail1.text &&
-          passwordConnect == controllerPassword1.text) {
-        Navigator.pop(context);
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              content: Text("Email incorrect, veillez réessayer svp!"),
+              content: Text(
+                  "Adresse email ou mot de passe incorrecte, veillez réessayer svp!"),
             );
           },
         );
