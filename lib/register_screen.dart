@@ -211,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
     var result = await MongoDatabase.insert(
         data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("ID inséré: " + _id.toHexString())));
+        SnackBar(content: Text("ID inséré: ${_id.toHexString()}")));
     // Affiche une notification avec l'ID inséré
     _clearAll();
   }

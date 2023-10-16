@@ -6,13 +6,13 @@ import 'package:presenceapp/register_screen.dart';
 import 'package:presenceapp/screens/homePage.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
-import 'utils/afficher_les_donnees.dart';
 
 const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login';
+
   const LoginPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
@@ -22,14 +22,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String userConnect = "";
+  String emailConnect = "";
+  String passwordConnect = '';
   late TextEditingController controllerEmail;
   late TextEditingController controllerPassword;
   var rememberValue = false;
   Locale currentLocale =
       const Locale('fr', 'FR'); // Langue par défaut : anglais
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   void _changeLanguage(Locale newLocale) {
     setState(() {
@@ -40,70 +39,90 @@ class _LoginPageState extends State<LoginPage> {
   void verif(
       {required TextEditingController controllerEmail1,
       required TextEditingController controllerPassword1}) async {
-    final formSate = _formKey.currentState;
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        });
     if (_formKey.currentState!.validate()) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          });
       await for (var snapshots in MongoDatabase.userCollection.find()) {
         if ((snapshots["email"] == controllerEmail1.text) &&
             (snapshots["password"] == controllerPassword1.text)) {
-          Navigator.pop(context);
-
-          MaterialPageRoute route = MaterialPageRoute(
-              builder: (context) => HomePage());
-          Navigator.pushReplacement(context, route);
-          print(snapshots["email"]);
-          print(snapshots["password"]);
-
           setState(() {
-            controllerEmail.text = "";
-            controllerPassword.text = "";
-            userConnect = snapshots["lastName"];
+            emailConnect = snapshots["email"];
+            passwordConnect = snapshots["password"];
+
+            userConnect = snapshots["lastName"] + " " + snapshots["firstName"];
           });
-        } else if ((snapshots["email"] != controllerEmail1.text) &&
-            (snapshots["password"] == controllerPassword1.text)) {
-          print("Une erreur est survenu");
-          Navigator.pop(context);
 
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                content: Text("Email incorrect, veillez réessayer"),
-              );
-            },
-          );
-        } else if ((snapshots["password"] != controllerPassword1.text) &&
-            (snapshots["email"] == controllerEmail1.text)) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                content: Text("Password incorrect, veillez réessayer"),
-              );
-            },
-          );
+          print(emailConnect);
+          print(passwordConnect);
+        } else if (snapshots["email"] == controllerEmail1.text &&
+            snapshots["password"] != controllerPassword1.text) {
+          setState(() {
+            emailConnect = snapshots["email"];
+          });
+        } else if (snapshots["email"] != controllerEmail1.text &&
+            snapshots["password"] == controllerPassword1.text) {
+          setState(() {
+            passwordConnect = snapshots["password"];
+          });
         } else {
-          print("Une erreur est survenu veillez réessayer");
-          Navigator.pop(context);
-
-          showDialog(
-            context: context,
-            builder: (context) {
-              return const AlertDialog(
-                content: Text("Identifiant incorrect, veillez réessayer"),
-              );
-            },
-          );
+          emailConnect = emailConnect;
+          passwordConnect = passwordConnect;
         }
+      }
+      print(emailConnect);
+      print(passwordConnect);
+      if (emailConnect == controllerEmail1.text &&
+          passwordConnect == controllerPassword1.text) {
+        Navigator.pop(context);
+        MaterialPageRoute newRoute = MaterialPageRoute(
+            builder: ((context) => HomePage(userConnect: userConnect)));
+        Navigator.pushReplacement(context, newRoute);
+        setState(() {
+          controllerEmail.text = "";
+          controllerPassword.text = "";
+        });
+      } else if (emailConnect == controllerEmail1.text &&
+          passwordConnect != controllerPassword1.text) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text("Password incorrect, veillez réessayer svp!"),
+            );
+          },
+        );
+      } else if (emailConnect != controllerEmail1.text &&
+          passwordConnect == controllerPassword1.text) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text("Email incorrect, veillez réessayer svp!"),
+            );
+          },
+        );
+      } else {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text("Identifiant inexistant, veillez réessayer svp"),
+            );
+          },
+        );
       }
     }
   }
+
+  /*  */
 
   @override
   void initState() {
