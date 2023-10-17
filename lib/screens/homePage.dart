@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const String id = 'home';
   const HomePage({super.key, required this.userConnect});
   final String userConnect;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
-    List<String> month = [
+    List<String> mois = [
       'Janvier',
       'Février',
       'Mars',
@@ -52,7 +59,10 @@ List<String> drawerList = [
                 children: [
                   Text(
                     'Months',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 25, 
+                      color: Colors.white
+                      ),
                   ),
                 ],
               ),
@@ -65,7 +75,7 @@ List<String> drawerList = [
                 height: 50,
                 child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: month.length,
+                    itemCount: mois.length,
                     separatorBuilder: (BuildContext context, int i) {
                       return const SizedBox(
                         width: 5,
@@ -75,9 +85,16 @@ List<String> drawerList = [
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             minimumSize: const Size(50, 5),
+                            backgroundColor: (DateTime.now().month== mois.indexOf(mois[index])+1)? Colors.teal: Colors.white,
                             ),
                         onPressed: () {},
-                        child: Text(month[index]),
+                        child: Text(
+                          mois[index],
+                          style: TextStyle(
+                            color: (DateTime.now().month== mois.indexOf(mois[index])+1)? Colors.white: Colors.teal,
+                          ),
+                          ),
+                          
                       );
                     }),
               ),
