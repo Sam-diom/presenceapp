@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       initialRoute: LoginPage.id,
       routes: {
         LoginPage.id: (context) => OnBoarding(),
-        RegisterPage.id: (context) => RegisterPage(title: 'inTime'),
-        HomePage.id: (context) => HomePage(userConnect: ''),
+        RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
+        HomePage.id: (context) => const HomePage(userConnect: ''),
       },
     );
   }

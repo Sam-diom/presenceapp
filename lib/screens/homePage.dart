@@ -74,7 +74,8 @@ List<String> drawerList = [
                     itemBuilder: (BuildContext context, int index) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(50, 5)),
+                            minimumSize: const Size(50, 5),
+                            ),
                         onPressed: () {},
                         child: Text(month[index]),
                       );
@@ -88,7 +89,8 @@ List<String> drawerList = [
                 children: [
                   Text(
                     'Days',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 25, color: Colors.teal),
                   ),
                 ],
               ),
@@ -125,7 +127,7 @@ List<String> drawerList = [
                   height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Color.fromARGB(255, 4, 60, 139),
+                    color: Color.fromARGB(255, 26, 34, 45),
                   ),
                   padding: EdgeInsets.all(10),
                   child: const Column(
@@ -139,6 +141,7 @@ List<String> drawerList = [
                       Text(
                         'Nafo Noura',
                         style: TextStyle(
+                          color: Colors.white,
                           fontSize: 20
                         ),
                         ),
@@ -183,14 +186,16 @@ List<String> drawerList = [
             elevation: 20,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.book), label: 'Presence'),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
+                  icon: Icon(Icons.book, color: Colors.teal,), 
+                  label: 'Presence'),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Accueil'),
+                icon: Icon(Icons.home, color: Colors.teal,), 
+                label: 'Accueil',
+                ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.qr_code),
-                label: 'QR code'),
+                icon: Icon(Icons.qr_code, color: Colors.teal,),
+                label: 'QR code',
+                ),
             ]
             ),
         ),
