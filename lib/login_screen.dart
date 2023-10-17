@@ -152,7 +152,7 @@ void main() async {
     final appLocalizations = AppLocalizations(currentLocale);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Color.fromARGB(255, 244, 241, 241),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
