@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:presenceapp/bdHelper/mongoBdConnect.dart';
 import 'package:presenceapp/login_screen.dart';
 import 'package:presenceapp/mongodbModel.dart';
@@ -24,20 +25,20 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: const Color.fromARGB(255, 244, 241, 241),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Inscription',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-              ),
-            ),
+            Text('Inscription',
+                style: GoogleFonts.acme(
+                  textStyle: const TextStyle(
+                    color: Colors.teal,
+                    fontSize: 40,
+                  ),
+                )),
             const SizedBox(
               height: 60,
             ),
@@ -61,6 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Prénom',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.teal),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -155,11 +157,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),
                     child: const Text(
                       'Inscription',
                       style: TextStyle(
+                        color: Colors.black,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -181,7 +185,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           );
                         },
-                        child: const Text('Se connecter'),
+                        child: const Text(
+                          'Se connecter',
+                          style: TextStyle(color: Colors.teal),
+                        ),
                       ),
                     ],
                   ),

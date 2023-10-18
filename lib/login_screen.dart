@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:presenceapp/app_localizations.dart';
 import 'package:presenceapp/register_screen.dart';
@@ -118,7 +119,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     //verif();
     controllerEmail = TextEditingController();
@@ -127,7 +127,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     controllerEmail.dispose();
     controllerPassword.dispose();
@@ -153,7 +152,7 @@ void main() async {
     final appLocalizations = AppLocalizations(currentLocale);
 
     return Scaffold(
-      backgroundColor:  Theme.of(context).colorScheme.background ,
+      backgroundColor: Color.fromARGB(255, 244, 241, 241),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -162,11 +161,13 @@ void main() async {
           children: <Widget>[
             Text(
               appLocalizations
-                  .translate('signInTitle'), // Utilisation de la traduction
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 40,
-              ),
+                  .translate('signInTitle'),
+                  style: GoogleFonts.acme(
+                    textStyle: const TextStyle(
+                      color: Colors.teal,
+                      fontSize: 40
+                    )
+                  ),
             ),
             const SizedBox(
               height: 60,
@@ -225,11 +226,13 @@ void main() async {
                           controllerPassword1: controllerPassword);
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
                       padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                     ),
                     child: Text(
                       appLocalizations.translate('signInButton'),
                       style: const TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -254,6 +257,9 @@ void main() async {
                         },
                         child: Text(
                           appLocalizations.translate('createAccount'),
+                          style:const TextStyle(
+                           color: Colors.teal,
+                          ),
                         ),
                       ),
                     ],
