@@ -32,14 +32,13 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Inscription',
-              style: GoogleFonts.acme(
-                 textStyle:const TextStyle(
-                  color: Colors.teal,
-                  fontSize: 40,
-              ),)
-              ),
+            Text('Inscription',
+                style: GoogleFonts.acme(
+                  textStyle: const TextStyle(
+                    color: Colors.teal,
+                    fontSize: 40,
+                  ),
+                )),
             const SizedBox(
               height: 60,
             ),
@@ -63,9 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Prénom',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.teal
-                              ),
+                              borderSide: BorderSide(color: Colors.teal),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -190,10 +187,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                         child: const Text(
                           'Se connecter',
-                          style: TextStyle(
-                            color: Colors.teal
-                          ),
-                          ),
+                          style: TextStyle(color: Colors.teal),
+                        ),
                       ),
                     ],
                   ),
@@ -220,8 +215,8 @@ class _RegisterPageState extends State<RegisterPage> {
       created:
           created, // Utilise la date et l'heure actuelles comme date de création
     );
-     var result = await MongoDatabase.insert(
-     data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
+    await MongoDatabase.insert(
+        data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("ID inséré: ${_id.toHexString()}")));
     // Affiche une notification avec l'ID inséré
