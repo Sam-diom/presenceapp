@@ -40,7 +40,6 @@ List<String> days = [
 List<String> drawerList = [
   'Mon Compte',
   'Paramètres',
-  'Justifier une absence',
   'Partager',
 ];
 
@@ -144,9 +143,9 @@ List<String> drawerList = [
                   height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Color.fromARGB(255, 26, 34, 45),
+                    color: const Color.fromARGB(255, 26, 34, 45),
                   ),
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

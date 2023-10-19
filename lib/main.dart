@@ -20,6 +20,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Colors.white
+        )
+     ),
       debugShowCheckedModeBanner: false,
       // ...
       localizationsDelegates: const [
@@ -33,7 +38,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-      initialRoute: LoginPage.id,
+      initialRoute: HomePage.id,
       routes: {
         LoginPage.id: (context) => OnBoarding(),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
