@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-      initialRoute: HomePage.id,
+      initialRoute: LoginPage.id,
       routes: {
         LoginPage.id: (context) => OnBoarding(),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
