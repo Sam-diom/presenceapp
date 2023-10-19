@@ -202,6 +202,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: BottomNavigationBar(
+          selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
