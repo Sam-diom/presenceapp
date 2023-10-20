@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -10,6 +11,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime today = DateTime.now();
+  
+  void _onDaySelected(DateTime day, DateTime focusDay){
+      setState(() {
+        today = day;
+      });
+    }
   @override
   Widget build(BuildContext context) {
     List<String> mois = [
@@ -43,7 +51,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 26, 34, 45),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'inTime',
@@ -87,27 +95,49 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Expanded(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 540,
-                child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: days.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      margin: const EdgeInsets.all(15),
-                      elevation: 4,
-                      child: Center(child: Text(days[index])),
-                    );
-                  },
+
+            Container(
+              child: TableCalendar(
+                locale: 'en_US',
+                rowHeight: 43,
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true, 
                 ),
-              ),
-            )
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day)=>isSameDay(day, today),
+                onDaySelected: _onDaySelected,
+                calendarStyle: CalendarStyle(
+                  todayTextStyle: TextStyle(
+                    color: Colors.white
+                  )
+                ),
+                focusedDay: today ,
+                firstDay: DateTime.utc(2017, 12, 10),
+                lastDay: DateTime.utc(2030, 11, 20),
+              )
+              )
+            // Expanded(
+            //   child: SizedBox(
+            //     width: MediaQuery.of(context).size.width,
+            //     height: 540,
+            //     child: GridView.builder(
+            //       scrollDirection: Axis.vertical,
+            //       itemCount: days.length,
+            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //           crossAxisCount: 2),
+            //       itemBuilder: (BuildContext context, int index) {
+            //         return Card(
+            //           shape: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(20)),
+            //           margin: const EdgeInsets.all(15),
+            //           elevation: 4,
+            //           child: Center(child: Text(days[index])),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
