@@ -72,7 +72,37 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
-                child: monthScreen(mois: mois),
+                child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: mois.length,
+                    separatorBuilder: (BuildContext context, int i) {
+                      return const SizedBox(
+                        width: 5,
+                      );
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          minimumSize: const Size(50, 5),
+                          backgroundColor: (DateTime.now().month ==
+                                  mois.indexOf(mois[index]) + 1)
+                              ? Colors.teal
+                              : Colors.white,
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          mois[index],
+                          style: TextStyle(
+                            color: (DateTime.now().month ==
+                                    mois.indexOf(mois[index]) + 1)
+                                ? Colors.white
+                                : Colors.teal,
+                          ),
+                        ),
+                      );
+                    }),
               ),
             ),
             const Padding(
@@ -172,7 +202,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: BottomNavigationBar(
-           selectedItemColor: Colors.teal,
+          selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
@@ -199,54 +229,6 @@ class _HomePageState extends State<HomePage> {
             ]),
       ),
     );
-  }
-}
-
-class monthScreen extends StatelessWidget {
-  const monthScreen({
-    super.key,
-    required this.mois,
-  });
-
-  final List<String> mois;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: mois.length,
-        separatorBuilder: (BuildContext context, int i) {
-          return const SizedBox(
-            width: 5,
-          );
-        },
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            width: 120,
-            height: 50,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                minimumSize: const Size(50, 5),
-                backgroundColor: (DateTime.now().month ==
-                        mois.indexOf(mois[index]) + 1)
-                    ? Colors.teal
-                    : Colors.white,
-              ),
-              onPressed: () {},
-              child: Text(
-                mois[index],
-                style: TextStyle(
-                  color: (DateTime.now().month ==
-                          mois.indexOf(mois[index]) + 1)
-                      ? Colors.white
-                      : Colors.teal,
-                ),
-              ),
-            ),
-          );
-        });
   }
 }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:presenceapp/bdHelper/mongoBdConnect.dart';
 import 'package:presenceapp/login_screen.dart';
 import 'package:presenceapp/mongodbModel.dart';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
 
 class RegisterPage extends StatefulWidget {
   static const String id = 'register';
@@ -62,7 +62,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             hintText: 'Prénom',
                             prefixIcon: const Icon(Icons.person),
                             border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.teal),
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
@@ -138,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {  
+                    onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Le formulaire est valide, vous pouvez ajouter votre logique de traitement ici
                         _insertData(
@@ -215,7 +214,7 @@ class _RegisterPageState extends State<RegisterPage> {
       created:
           created, // Utilise la date et l'heure actuelles comme date de création
     );
-    await MongoDatabase.insert(
+    var result = await MongoDatabase.insert(
         data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("ID inséré: ${_id.toHexString()}")));

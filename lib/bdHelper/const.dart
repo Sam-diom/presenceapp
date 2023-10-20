@@ -1,5 +1,5 @@
 const MONGO_CONN_URL =
-    'mongodb+srv://newUser:QZBa5vmWTrbviwwH@atlascluster.bkhwvgo.mongodb.net/InTime';
+    'mongodb+srv://samdiom001:yJWnchQPIDJeWK7y@cluster0.vdz4m2r.mongodb.net/presenceapp';
 const USER_COLLECTION = 'users';
 
 
