@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
     List<String> mois = [
@@ -28,26 +27,29 @@ class _HomePageState extends State<HomePage> {
       'Décembre',
     ];
 
-List<String> days = [
-  'Lundi',
-  'Mardi',
-  'Mercredi',
-  'Jeudi',
-  'Vendredi',
-  'Samedi',
-];
+    List<String> days = [
+      'Lundi',
+      'Mardi',
+      'Mercredi',
+      'Jeudi',
+      'Vendredi',
+      'Samedi',
+    ];
 
-List<String> drawerList = [
-  'Mon Compte',
-  'Paramètres',
-  'Justifier une absence',
-  'Partager',
-];
+    List<String> drawerList = [
+      'Mon Compte',
+      'Paramètres',
+      'Partager',
+    ];
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 26, 34, 45),
       appBar: AppBar(
-        title: const Text('inTime'),
+        title: const Text(
+          'inTime',
+          style: TextStyle(color: Colors.black),
+        ),
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: Column(
@@ -59,10 +61,7 @@ List<String> drawerList = [
                 children: [
                   Text(
                     'Months',
-                    style: TextStyle(
-                      fontSize: 25, 
-                      color: Colors.white
-                      ),
+                    style: TextStyle(fontSize: 25, color: Colors.white),
                   ),
                 ],
               ),
@@ -84,17 +83,24 @@ List<String> drawerList = [
                     itemBuilder: (BuildContext context, int index) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(50, 5),
-                            backgroundColor: (DateTime.now().month== mois.indexOf(mois[index])+1)? Colors.teal: Colors.white,
-                            ),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          minimumSize: const Size(50, 5),
+                          backgroundColor: (DateTime.now().month ==
+                                  mois.indexOf(mois[index]) + 1)
+                              ? Colors.teal
+                              : Colors.white,
+                        ),
                         onPressed: () {},
                         child: Text(
                           mois[index],
                           style: TextStyle(
-                            color: (DateTime.now().month== mois.indexOf(mois[index])+1)? Colors.white: Colors.teal,
+                            color: (DateTime.now().month ==
+                                    mois.indexOf(mois[index]) + 1)
+                                ? Colors.white
+                                : Colors.teal,
                           ),
-                          ),
-                          
+                        ),
                       );
                     }),
               ),
@@ -106,8 +112,7 @@ List<String> drawerList = [
                 children: [
                   Text(
                     'Days',
-                    style: TextStyle(
-                      fontSize: 25, color: Colors.teal),
+                    style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
               ),
@@ -123,6 +128,8 @@ List<String> drawerList = [
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
                       margin: const EdgeInsets.all(15),
                       elevation: 4,
                       child: Center(child: Text(days[index])),
@@ -133,92 +140,95 @@ List<String> drawerList = [
             )
           ],
         ),
-        ),
-        drawer: Drawer(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  width: 300,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Color.fromARGB(255, 26, 34, 45),
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        radius: 45,
-                        child: Icon(Icons.account_circle),
-                      ),
-                      SizedBox(height: 20,),
-                      Text(
-                        'Nafo Noura',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                        ),
-                        ),
-                    ],
-                  ),
-              
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Container(
+                width: 300,
+                height: 200,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: const Color.fromARGB(255, 26, 34, 45),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 45,
+                      child: Icon(Icons.account_circle),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Nafo Noura',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index){
+            ),
+            Expanded(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: ListView.separated(
+                    itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        child: ListTile(
-                          title: Text(drawerList[index]),
-                          trailing: IconButton(
-                            onPressed: (){},
-                            icon: Icon(Icons.arrow_forward_ios),
-                            ),
-                        )
-                      );
-                    }, 
-                    separatorBuilder: (BuildContext context, int index){
-                       return Divider();
-                    }, 
-                    itemCount: drawerList.length
-                    ),
-                ),
-              )
-            ],
-          ),
+                          child: ListTile(
+                        title: Text(drawerList[index]),
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.arrow_forward_ios),
+                        ),
+                      ));
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider();
+                    },
+                    itemCount: drawerList.length),
+              ),
+            )
+          ],
         ),
-        bottomNavigationBar: Container(
-          height: 80,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: BottomNavigationBar(
+      ),
+      bottomNavigationBar: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: BottomNavigationBar(
+          selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.book, color: Colors.teal,), 
+                  icon: Icon(
+                    Icons.book,
+                    color: Colors.teal,
+                  ),
                   label: 'Presence'),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home, color: Colors.teal,), 
+                icon: Icon(
+                  Icons.home,
+                  color: Colors.teal,
+                ),
                 label: 'Accueil',
-                ),
+              ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.qr_code, color: Colors.teal,),
-                label: 'QR code',
+                icon: Icon(
+                  Icons.qr_code,
+                  color: Colors.teal,
                 ),
-            ]
-            ),
-        ),
-      );
-
-    
+                label: 'QR code',
+              ),
+            ]),
+      ),
+    );
   }
 }
 

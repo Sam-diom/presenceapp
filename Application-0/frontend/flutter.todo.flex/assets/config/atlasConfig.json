@@ -1,9 +1,0 @@
-{
-    "appId": "application-0-fvija",
-    "appUrl": "https://realm.mongodb.com/groups/651181630ce54328b0d00a7d/apps/651ae3d5ffc5fdd0e63ebae5",
-    "baseUrl": "https://realm.mongodb.com",
-    "clientApiBaseUrl": "https://us-central1.gcp.realm.mongodb.com",
-    "dataApiBaseUrl": "https://us-central1.gcp.data.mongodb-api.com",
-    "dataExplorerLink": "https://cloud.mongodb.com/links/651181630ce54328b0d00a7d/explorer/Cluster0/database/collection/find",
-    "dataSourceName": "mongodb-atlas"
-}
