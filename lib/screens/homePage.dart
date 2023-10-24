@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -10,6 +11,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime today = DateTime.now();
+  DateTime? _selectedDay;
+
+  // Map<DateTime, List<Event>> event = {};
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  
+  void _onDaySelected(DateTime Selectedday, DateTime focusDay){
+      setState(() {
+        today = Selectedday;
+      });
+    }
   @override
   Widget build(BuildContext context) {
     List<String> mois = [
@@ -43,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 26, 34, 45),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
           'inTime',
@@ -61,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     'Months',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
               ),
@@ -72,37 +88,7 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: mois.length,
-                    separatorBuilder: (BuildContext context, int i) {
-                      return const SizedBox(
-                        width: 5,
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          minimumSize: const Size(50, 5),
-                          backgroundColor: (DateTime.now().month ==
-                                  mois.indexOf(mois[index]) + 1)
-                              ? Colors.teal
-                              : Colors.white,
-                        ),
-                        onPressed: () {},
-                        child: Text(
-                          mois[index],
-                          style: TextStyle(
-                            color: (DateTime.now().month ==
-                                    mois.indexOf(mois[index]) + 1)
-                                ? Colors.white
-                                : Colors.teal,
-                          ),
-                        ),
-                      );
-                    }),
+                child: monthScreen(mois: mois),
               ),
             ),
             const Padding(
@@ -117,27 +103,55 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Expanded(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 540,
-                child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: days.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      margin: const EdgeInsets.all(15),
-                      elevation: 4,
-                      child: Center(child: Text(days[index])),
-                    );
-                  },
+
+            Container(
+              child: TableCalendar(
+                locale: 'en_US',
+                rowHeight: 43,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true, 
                 ),
-              ),
-            )
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day)=>isSameDay(day, today),
+                onDaySelected: _onDaySelected,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                calendarStyle: const CalendarStyle(
+                  todayTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.teal
+                  ),
+                  outsideDaysVisible: false,
+                ),
+                focusedDay: today ,
+                firstDay: DateTime.utc(2017, 12, 10),
+                lastDay: DateTime.utc(2030, 11, 20),
+              )
+              )
+            // Expanded(
+            //   child: SizedBox(
+            //     width: MediaQuery.of(context).size.width,
+            //     height: 540,
+            //     child: GridView.builder(
+            //       scrollDirection: Axis.vertical,
+            //       itemCount: days.length,
+            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //           crossAxisCount: 2),
+            //       itemBuilder: (BuildContext context, int index) {
+            //         return Card(
+            //           shape: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(20)),
+            //           margin: const EdgeInsets.all(15),
+            //           elevation: 4,
+            //           child: Center(child: Text(days[index])),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -173,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: SizedBox(
+              child: SizedBox( 
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
@@ -183,12 +197,12 @@ class _HomePageState extends State<HomePage> {
                         title: Text(drawerList[index]),
                         trailing: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.arrow_forward_ios),
+                          icon: const Icon(Icons.arrow_forward_ios),
                         ),
                       ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                     itemCount: drawerList.length),
               ),
@@ -202,7 +216,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: BottomNavigationBar(
-          selectedItemColor: Colors.teal,
+           selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
@@ -232,6 +246,54 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class monthScreen extends StatelessWidget {
+  const monthScreen({
+    super.key,
+    required this.mois,
+  });
+
+  final List<String> mois;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: mois.length,
+        separatorBuilder: (BuildContext context, int i) {
+          return const SizedBox(
+            width: 5,
+          );
+        },  
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            width: 120,
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                minimumSize: const Size(50, 5),
+                backgroundColor: (DateTime.now().month ==
+                        mois.indexOf(mois[index]) + 1)
+                    ? Colors.white
+                    : Colors.teal,
+              ),
+              onPressed: () {},
+              child: Text(
+                mois[index],
+                style: TextStyle(
+                  color: (DateTime.now().month ==
+                          mois.indexOf(mois[index]) + 1)
+                      ? Colors.teal
+                      : Colors.white,
+                ),
+              ),
+            ),
+          );
+        });
+  }
+}
+
 class elements extends StatelessWidget {
   const elements({
     super.key,
@@ -246,7 +308,8 @@ class elements extends StatelessWidget {
       width: 150,
       height: 150,
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+          color: Colors.blue, borderRadius: BorderRadius.circular(15)
+        ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
