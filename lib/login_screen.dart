@@ -2,10 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:presenceapp/app_localizations.dart';
-import 'package:presenceapp/register_screen.dart';
-import 'package:presenceapp/screens/homePage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:inTime/app_localizations.dart';
+import 'package:inTime/register_screen.dart';
+import 'package:inTime/screens/homePage.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
 
