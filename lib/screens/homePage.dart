@@ -12,10 +12,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime today = DateTime.now();
+  DateTime? _selectedDay;
+
+  // Map<DateTime, List<Event>> event = {};
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
   
-  void _onDaySelected(DateTime day, DateTime focusDay){
+  void _onDaySelected(DateTime Selectedday, DateTime focusDay){
       setState(() {
-        today = day;
+        today = Selectedday;
       });
     }
   @override
@@ -51,7 +59,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
           'inTime',
@@ -69,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     'Months',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
               ),
@@ -100,17 +108,23 @@ class _HomePageState extends State<HomePage> {
               child: TableCalendar(
                 locale: 'en_US',
                 rowHeight: 43,
-                headerStyle: HeaderStyle(
+                headerStyle: const HeaderStyle(
                   formatButtonVisible: false,
                   titleCentered: true, 
                 ),
                 availableGestures: AvailableGestures.all,
                 selectedDayPredicate: (day)=>isSameDay(day, today),
                 onDaySelected: _onDaySelected,
-                calendarStyle: CalendarStyle(
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                calendarStyle: const CalendarStyle(
                   todayTextStyle: TextStyle(
-                    color: Colors.white
-                  )
+                    color: Colors.white,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.teal
+                  ),
+                  outsideDaysVisible: false,
                 ),
                 focusedDay: today ,
                 firstDay: DateTime.utc(2017, 12, 10),
@@ -173,7 +187,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: SizedBox(
+              child: SizedBox( 
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
@@ -183,12 +197,12 @@ class _HomePageState extends State<HomePage> {
                         title: Text(drawerList[index]),
                         trailing: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.arrow_forward_ios),
+                          icon: const Icon(Icons.arrow_forward_ios),
                         ),
                       ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                     itemCount: drawerList.length),
               ),
@@ -249,7 +263,7 @@ class monthScreen extends StatelessWidget {
           return const SizedBox(
             width: 5,
           );
-        },
+        },  
         itemBuilder: (BuildContext context, int index) {
           return Container(
             width: 120,
@@ -261,8 +275,8 @@ class monthScreen extends StatelessWidget {
                 minimumSize: const Size(50, 5),
                 backgroundColor: (DateTime.now().month ==
                         mois.indexOf(mois[index]) + 1)
-                    ? Colors.teal
-                    : Colors.white,
+                    ? Colors.white
+                    : Colors.teal,
               ),
               onPressed: () {},
               child: Text(
@@ -270,8 +284,8 @@ class monthScreen extends StatelessWidget {
                 style: TextStyle(
                   color: (DateTime.now().month ==
                           mois.indexOf(mois[index]) + 1)
-                      ? Colors.white
-                      : Colors.teal,
+                      ? Colors.teal
+                      : Colors.white,
                 ),
               ),
             ),
@@ -294,7 +308,8 @@ class elements extends StatelessWidget {
       width: 150,
       height: 150,
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(15)),
+          color: Colors.blue, borderRadius: BorderRadius.circular(15)
+        ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
