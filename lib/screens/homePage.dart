@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
     List<String> drawerList = [
       'Mon Compte',
       'Paramètres',
-      'Partager',
+      'Déconnection',
     ];
 
     return Scaffold(
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.only(left: 16.0, top: 5.0),
+              padding: EdgeInsets.only(left: 16.0, top: 15.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                 child: monthScreen(mois: mois),
               ),
             ),
+            SizedBox(height: 10,),
             const Padding(
               padding: EdgeInsets.only(left: 16.0),
               child: Row(
@@ -103,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
+        
             Container(
               child: TableCalendar(
                 locale: 'en_US',

@@ -1,6 +1,6 @@
 import 'package:introduction_slider/introduction_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:presenceapp/login_screen.dart';
+import 'package:inTime/login_screen.dart';
 
 class OnBoarding extends StatelessWidget {
   @override
