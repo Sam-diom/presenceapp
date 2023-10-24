@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inTime/bdHelper/mongoBdConnect.dart';
+import 'package:inTime/login_screen.dart';
+import 'package:inTime/mongodbModel.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
-import 'package:presenceapp/bdHelper/mongoBdConnect.dart';
-import 'package:presenceapp/login_screen.dart';
-import 'package:presenceapp/mongodbModel.dart';
 
 class RegisterPage extends StatefulWidget {
   static const String id = 'register';
