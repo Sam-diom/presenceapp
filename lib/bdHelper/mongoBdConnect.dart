@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:mongo_dart/mongo_dart.dart';
 import 'const.dart';
-import 'package:presenceapp/mongodbModel.dart';
+import 'package:inTime/mongodbModel.dart';
 
 class MongoDatabase {
   static var db, userCollection;
