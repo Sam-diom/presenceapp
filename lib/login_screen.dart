@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inTime/app_localizations.dart';
 import 'package:inTime/register_screen.dart';
 import 'package:inTime/screens/homePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
 

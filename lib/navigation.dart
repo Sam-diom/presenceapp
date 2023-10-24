@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:presenceapp/login_screen.dart';
-import 'package:presenceapp/screens/homePage.dart';
-import 'package:presenceapp/utils/onBoarding.dart';
+import 'package:inTime/login_screen.dart';
+import 'package:inTime/screens/homePage.dart';
+import 'package:inTime/utils/onBoarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavigationPage extends StatefulWidget {

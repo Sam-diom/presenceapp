@@ -1,6 +1,6 @@
 import 'package:introduction_slider/introduction_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:presenceapp/login_screen.dart';
+import 'package:inTime/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoarding extends StatelessWidget {
@@ -24,7 +24,7 @@ class OnBoarding extends StatelessWidget {
                 width: 350,
               ),
             ),
-            title: Padding(
+            title: const Padding(
               padding: EdgeInsets.only(
                 bottom: 20,
               ),
