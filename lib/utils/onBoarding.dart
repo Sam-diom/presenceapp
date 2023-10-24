@@ -11,31 +11,35 @@ class OnBoarding extends StatelessWidget {
         items: [
           IntroductionSliderItem(
             logo: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset("assets/img1.png"),
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(
+                "assets/img1.png",
+                height: 350,
+                width: 350,
+              ),
             ),
             title: Padding(
               padding: EdgeInsets.only(
-                bottom: 30,
+                bottom: 20,
               ),
               child: Text(
                 "Bienvenue Sur inTime",
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             subtitle: const Padding(
               padding: EdgeInsets.only(
-                bottom: 100,
+                bottom: 170,
                 left: 20,
                 right: 20,
               ),
               child: Text(
                 "L'Application de Gestion de Présence proposant un ensemble de fonctionnalités clés pour répondre à vos besoins de gestion de présence !",
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -43,28 +47,36 @@ class OnBoarding extends StatelessWidget {
           ),
           IntroductionSliderItem(
             logo: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset("assets/img2.png"),
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(
+                "assets/img2.png",
+                height: 350,
+                width: 350,
+              ),
             ),
             title: const Padding(
               padding: EdgeInsets.only(
-                bottom: 30,
+                bottom: 20,
               ),
               child: Text(
                 "inTime et la gestion de présence !",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             subtitle: const Padding(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.only(
+                bottom: 170,
+                left: 20,
+                right: 20,
+              ),
               child: Text(
                 "Enregistrer vos présences en toute simplicité, que ce soit lors de cours, de réunions, d'événements ou d'autres activités. Chaque présence est horodatée, assurant ainsi une traçabilité précise des entrées et sorties.",
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -72,8 +84,12 @@ class OnBoarding extends StatelessWidget {
           ),
           IntroductionSliderItem(
             logo: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Image.asset("assets/img3.png"),
+              padding: const EdgeInsets.all(10.0),
+              child: Image.asset(
+                "assets/img3.png",
+                height: 350,
+                width: 350,
+              ),
             ),
             title: const Padding(
               padding: EdgeInsets.all(10),
@@ -81,19 +97,21 @@ class OnBoarding extends StatelessWidget {
                 textAlign: TextAlign.center,
                 "avec inTime !",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             subtitle: Padding(
-              padding: EdgeInsets.all(
-                25,
+              padding: EdgeInsets.only(
+                bottom: 170,
+                left: 20,
+                right: 20,
               ),
               child: Text(
                 "Accédez à des rapports détaillés et à des statistiques sur la présence. Recevez des notifications et des alertes en temps réel pour les absences, les retards ou d'autres événements importants.",
                 style: TextStyle(
-                  fontSize: 23,
+                  fontSize: 20,
                 ),
                 textAlign: TextAlign.center,
               ),
