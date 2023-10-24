@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () {  
                       if (_formKey.currentState!.validate()) {
                         // Le formulaire est valide, vous pouvez ajouter votre logique de traitement ici
                         _insertData(
