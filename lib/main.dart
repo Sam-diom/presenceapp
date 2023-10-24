@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:presenceapp/navigation.dart';
 import 'package:presenceapp/register_screen.dart';
 import 'package:presenceapp/screens/homePage.dart';
 import 'package:presenceapp/screens/presenceScreen.dart';
@@ -34,9 +35,10 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-      initialRoute: LoginPage.id,
+      initialRoute: NavigationPage.id,
       routes: {
-        LoginPage.id: (context) => OnBoarding(),
+        NavigationPage.id: (context) => NavigationPage(),
+        LoginPage.id: (context) => LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
         HomePage.id: (context) => const HomePage(userConnect: ''),
       },
