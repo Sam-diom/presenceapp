@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  File? _selectedImage;
   DateTime today = DateTime.now();
   DateTime? _selectedDay;
 
@@ -55,8 +60,10 @@ class _HomePageState extends State<HomePage> {
     List<String> drawerList = [
       'Mon Compte',
       'Paramètres',
-      'Déconnection',
+      'Déconnexion',
     ];
+    
+   
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -132,27 +139,6 @@ class _HomePageState extends State<HomePage> {
                 lastDay: DateTime.utc(2030, 11, 20),
               )
               )
-            // Expanded(
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 540,
-            //     child: GridView.builder(
-            //       scrollDirection: Axis.vertical,
-            //       itemCount: days.length,
-            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 2),
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Card(
-            //           shape: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(20)),
-            //           margin: const EdgeInsets.all(15),
-            //           elevation: 4,
-            //           child: Center(child: Text(days[index])),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),
@@ -166,20 +152,26 @@ class _HomePageState extends State<HomePage> {
                 height: 200,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255, 26, 34, 45),
+                  color: const Color.fromARGB(255, 244, 244, 244),
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CircleAvatar(
                       radius: 45,
-                      child: Icon(Icons.account_circle),
+                      child: IconButton(
+                        onPressed: (){
+                          _pickImage();
+                        }, 
+                        icon: const Icon(Icons.dangerous),
+                        ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
+                     _selectedImage != null ? Image.file(_selectedImage!):Text('qll'),
+                    const Text(
                       'Nafo Noura',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
@@ -212,9 +204,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 80,
+        height: MediaQuery.sizeOf(context).height/9,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(200), 
         ),
         child: BottomNavigationBar(
            selectedItemColor: Colors.teal,
@@ -245,6 +237,15 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+   Future _pickImage() async {
+      final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
+     
+      if (returnImage == null) return;
+      setState(() {
+        _selectedImage= File(returnImage!.path);
+      });
+    }
+  
 }
 
 class monthScreen extends StatelessWidget {
@@ -325,3 +326,5 @@ class elements extends StatelessWidget {
     );
   }
 }
+
+
