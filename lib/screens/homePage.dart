@@ -154,27 +154,6 @@ class _HomePageState extends State<HomePage> {
                 lastDay: DateTime.utc(2030, 11, 20),
               )
               )
-            // Expanded(
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 540,
-            //     child: GridView.builder(
-            //       scrollDirection: Axis.vertical,
-            //       itemCount: days.length,
-            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 2),
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Card(
-            //           shape: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(20)),
-            //           margin: const EdgeInsets.all(15),
-            //           elevation: 4,
-            //           child: Center(child: Text(days[index])),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),
@@ -204,13 +183,6 @@ class _HomePageState extends State<HomePage> {
                               width: 4,
                               color: const Color.fromARGB(255, 255, 255, 255),
                             ),
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     spreadRadius: 2,
-                            //     blurRadius: 10,
-                            //     color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1)
-                            //   )
-                            // ],
                             shape: BoxShape.circle,
                           ),
                           child:  _selectedImage != null ? CircleAvatar(
