@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import '../login_screen.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -25,12 +27,13 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-  
-  void _onDaySelected(DateTime Selectedday, DateTime focusDay){
-      setState(() {
-        today = Selectedday;
-      });
-    }
+
+  void _onDaySelected(DateTime Selectedday, DateTime focusDay) {
+    setState(() {
+      today = Selectedday;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> mois = [
@@ -63,7 +66,17 @@ class _HomePageState extends State<HomePage> {
       'Déconnexion',
     ];
     
-   
+    bool loading = false;
+    _logOut() async{
+      setState(() {
+        loading = true;
+      });
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setBool('connected', false);
+      setState(() {
+        loading = false;
+      });
+    }
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -98,7 +111,9 @@ class _HomePageState extends State<HomePage> {
                 child: monthScreen(mois: mois),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 16.0),
               child: Row(
@@ -111,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-        
+
             Container(
               child: TableCalendar(
                 locale: 'en_US',
@@ -139,6 +154,27 @@ class _HomePageState extends State<HomePage> {
                 lastDay: DateTime.utc(2030, 11, 20),
               )
               )
+            // Expanded(
+            //   child: SizedBox(
+            //     width: MediaQuery.of(context).size.width,
+            //     height: 540,
+            //     child: GridView.builder(
+            //       scrollDirection: Axis.vertical,
+            //       itemCount: days.length,
+            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //           crossAxisCount: 2),
+            //       itemBuilder: (BuildContext context, int index) {
+            //         return Card(
+            //           shape: OutlineInputBorder(
+            //               borderRadius: BorderRadius.circular(20)),
+            //           margin: const EdgeInsets.all(15),
+            //           elevation: 4,
+            //           child: Center(child: Text(days[index])),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -149,42 +185,60 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: 300,
-                height: 200,
+                height: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255, 244, 244, 244),
+                  color: Colors.teal,
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // FloatingActionButton(
-                    //   onPressed: (){
-                    //     _pickImage();
-                    //   },
-                    //   child:  _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,):Text('qll'),
-                    //   ),
-                    CircleAvatar(
-                      radius: 50,
-                      child: Column(
-                        children: [
-                          _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,): Text('Image'),
-                          IconButton(onPressed: (){_pickImage();}, icon: Icon(Icons.camera))
-                    
-                        ],
-                      )
-                      //  Stack(
-                      //   alignment: Alignment.bottomCenter,
-                      //   children: [
-                      //      _
-                      //   ],
-                      // )
-                      // IconButton(
-                      //   onPressed: (){
-                      //     _pickImage();
-                      //   }, 
-                      //   icon:  _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,):Icon(Icons.camera),
-                      //   ),
+                    Stack(
+                      children: [
+                        Container(
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 4,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            // boxShadow: [
+                            //   BoxShadow(
+                            //     spreadRadius: 2,
+                            //     blurRadius: 10,
+                            //     color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1)
+                            //   )
+                            // ],
+                            shape: BoxShape.circle,
+                          ),
+                          child:  _selectedImage != null ? CircleAvatar(
+                           backgroundImage: FileImage(_selectedImage!,)
+                           ):Center(child: Text('Share Image')),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.white
+                              ),
+                              color: Colors.teal,
+                            ),
+                            child: IconButton(
+                              onPressed:(){
+                                _pickImage();
+                              }, icon: Icon(Icons.edit)
+                              ),
+                          )
+                          )
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -199,7 +253,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: SizedBox( 
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
@@ -207,10 +261,18 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           child: ListTile(
                         title: Text(drawerList[index]),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.arrow_forward_ios),
-                        ),
+                        trailing: ((drawerList[index] == 'Déconnexion') &&
+                                (loading == true))
+                            ? const CircularProgressIndicator()
+                            : IconButton(
+                                onPressed: () {
+                                  if (drawerList[index] == 'Déconnexion') {
+                                    _logOut();
+                                    Navigator.pushNamed(context, LoginPage.id);
+                                  }
+                                },
+                                icon: const Icon(Icons.arrow_forward_ios),
+                              ),
                       ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -223,12 +285,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery.sizeOf(context).height/9,
+        height: 80,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(200), 
         ),
         child: BottomNavigationBar(
-           selectedItemColor: Colors.teal,
+            selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
@@ -284,7 +346,7 @@ class monthScreen extends StatelessWidget {
           return const SizedBox(
             width: 5,
           );
-        },  
+        },
         itemBuilder: (BuildContext context, int index) {
           return Container(
             width: 120,
@@ -294,17 +356,16 @@ class monthScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 minimumSize: const Size(50, 5),
-                backgroundColor: (DateTime.now().month ==
-                        mois.indexOf(mois[index]) + 1)
-                    ? Colors.white
-                    : Colors.teal,
+                backgroundColor:
+                    (DateTime.now().month == mois.indexOf(mois[index]) + 1)
+                        ? Colors.white
+                        : Colors.teal,
               ),
               onPressed: () {},
               child: Text(
                 mois[index],
                 style: TextStyle(
-                  color: (DateTime.now().month ==
-                          mois.indexOf(mois[index]) + 1)
+                  color: (DateTime.now().month == mois.indexOf(mois[index]) + 1)
                       ? Colors.teal
                       : Colors.white,
                 ),
@@ -329,8 +390,7 @@ class elements extends StatelessWidget {
       width: 150,
       height: 150,
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(15)
-        ),
+          color: Colors.blue, borderRadius: BorderRadius.circular(15)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

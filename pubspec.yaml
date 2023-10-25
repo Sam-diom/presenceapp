@@ -46,12 +46,13 @@ dependencies:
   flutter_svg: ^2.0.7
   google_fonts: ^6.1.0
   table_calendar: ^3.0.9
-  image_picker: ^1.0.4
+  shared_preferences: ^2.2.2
   flutter_native_splash: ^2.3.4
+  image_picker: ^1.0.4
 
-flutter-native-splash: 
-  background: #FFFFFF
-  image: 
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/splash/splash.jpg
 
 dev_dependencies:
   flutter_test:
