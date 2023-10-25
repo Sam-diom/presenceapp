@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:inTime/navigation.dart';
 import 'package:inTime/register_screen.dart';
 import 'package:inTime/screens/homePage.dart';
 import 'package:inTime/screens/presenceScreen.dart';
@@ -20,11 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          color: Colors.white
-        )
-     ),
+      theme: ThemeData(appBarTheme: AppBarTheme(color: Colors.white)),
       debugShowCheckedModeBanner: false,
       // ...
       localizationsDelegates: const [
@@ -38,9 +35,10 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-      initialRoute: LoginPage.id,
+      initialRoute: NavigationPage.id,
       routes: {
-        LoginPage.id: (context) => OnBoarding(),
+        NavigationPage.id: (context) => NavigationPage(),
+        LoginPage.id: (context) => LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
         HomePage.id: (context) => const HomePage(userConnect: ''),
       },

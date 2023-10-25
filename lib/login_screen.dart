@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inTime/app_localizations.dart';
 import 'package:inTime/register_screen.dart';
 import 'package:inTime/screens/homePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
 
@@ -35,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       currentLocale = newLocale;
     });
+  }
+
+  _connected() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', true);
   }
 
   void verif(
@@ -79,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       print(passwordConnect);
       if (emailConnect == controllerEmail1.text &&
           passwordConnect == controllerPassword1.text) {
+        _connected();
         Navigator.pop(context);
         MaterialPageRoute newRoute = MaterialPageRoute(
             builder: ((context) => HomePage(userConnect: userConnect)));
@@ -160,14 +167,9 @@ void main() async {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              appLocalizations
-                  .translate('signInTitle'),
-                  style: GoogleFonts.acme(
-                    textStyle: const TextStyle(
-                      color: Colors.teal,
-                      fontSize: 40
-                    )
-                  ),
+              appLocalizations.translate('signInTitle'),
+              style: GoogleFonts.acme(
+                  textStyle: const TextStyle(color: Colors.teal, fontSize: 40)),
             ),
             const SizedBox(
               height: 60,
@@ -257,8 +259,8 @@ void main() async {
                         },
                         child: Text(
                           appLocalizations.translate('createAccount'),
-                          style:const TextStyle(
-                           color: Colors.teal,
+                          style: const TextStyle(
+                            color: Colors.teal,
                           ),
                         ),
                       ),

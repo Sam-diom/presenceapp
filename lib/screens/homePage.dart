@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inTime/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,12 +22,13 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-  
-  void _onDaySelected(DateTime Selectedday, DateTime focusDay){
-      setState(() {
-        today = Selectedday;
-      });
-    }
+
+  void _onDaySelected(DateTime Selectedday, DateTime focusDay) {
+    setState(() {
+      today = Selectedday;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> mois = [
@@ -55,8 +58,19 @@ class _HomePageState extends State<HomePage> {
     List<String> drawerList = [
       'Mon Compte',
       'Paramètres',
-      'Déconnection',
+      'Déconnexion',
     ];
+    bool loading = false;
+    _logOut() async {
+      setState(() {
+        loading = true;
+      });
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setBool('connected', false);
+      setState(() {
+        loading = false;
+      });
+    }
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
@@ -91,7 +105,9 @@ class _HomePageState extends State<HomePage> {
                 child: monthScreen(mois: mois),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 16.0),
               child: Row(
@@ -104,34 +120,31 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-        
+
             Container(
-              child: TableCalendar(
-                locale: 'en_US',
-                rowHeight: 43,
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true, 
+                child: TableCalendar(
+              locale: 'en_US',
+              rowHeight: 43,
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+              ),
+              availableGestures: AvailableGestures.all,
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              onDaySelected: _onDaySelected,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarStyle: const CalendarStyle(
+                todayTextStyle: TextStyle(
+                  color: Colors.white,
                 ),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day)=>isSameDay(day, today),
-                onDaySelected: _onDaySelected,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle: const CalendarStyle(
-                  todayTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  selectedDecoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.teal
-                  ),
-                  outsideDaysVisible: false,
-                ),
-                focusedDay: today ,
-                firstDay: DateTime.utc(2017, 12, 10),
-                lastDay: DateTime.utc(2030, 11, 20),
-              )
-              )
+                selectedDecoration: BoxDecoration(
+                    shape: BoxShape.rectangle, color: Colors.teal),
+                outsideDaysVisible: false,
+              ),
+              focusedDay: today,
+              firstDay: DateTime.utc(2017, 12, 10),
+              lastDay: DateTime.utc(2030, 11, 20),
+            ))
             // Expanded(
             //   child: SizedBox(
             //     width: MediaQuery.of(context).size.width,
@@ -188,7 +201,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
-              child: SizedBox( 
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
@@ -196,10 +209,18 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           child: ListTile(
                         title: Text(drawerList[index]),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.arrow_forward_ios),
-                        ),
+                        trailing: ((drawerList[index] == 'Déconnexion') &&
+                                (loading == true))
+                            ? const CircularProgressIndicator()
+                            : IconButton(
+                                onPressed: () {
+                                  if (drawerList[index] == 'Déconnexion') {
+                                    _logOut();
+                                    Navigator.pushNamed(context, LoginPage.id);
+                                  }
+                                },
+                                icon: const Icon(Icons.arrow_forward_ios),
+                              ),
                       ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -212,12 +233,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 80,
+        height: MediaQuery.sizeOf(context).height / 9,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
         ),
         child: BottomNavigationBar(
-           selectedItemColor: Colors.teal,
+            selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
             items: const [
@@ -264,7 +285,7 @@ class monthScreen extends StatelessWidget {
           return const SizedBox(
             width: 5,
           );
-        },  
+        },
         itemBuilder: (BuildContext context, int index) {
           return Container(
             width: 120,
@@ -274,17 +295,16 @@ class monthScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 minimumSize: const Size(50, 5),
-                backgroundColor: (DateTime.now().month ==
-                        mois.indexOf(mois[index]) + 1)
-                    ? Colors.white
-                    : Colors.teal,
+                backgroundColor:
+                    (DateTime.now().month == mois.indexOf(mois[index]) + 1)
+                        ? Colors.white
+                        : Colors.teal,
               ),
               onPressed: () {},
               child: Text(
                 mois[index],
                 style: TextStyle(
-                  color: (DateTime.now().month ==
-                          mois.indexOf(mois[index]) + 1)
+                  color: (DateTime.now().month == mois.indexOf(mois[index]) + 1)
                       ? Colors.teal
                       : Colors.white,
                 ),
@@ -309,8 +329,7 @@ class elements extends StatelessWidget {
       width: 150,
       height: 150,
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(15)
-        ),
+          color: Colors.blue, borderRadius: BorderRadius.circular(15)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

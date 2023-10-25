@@ -1,8 +1,14 @@
 import 'package:introduction_slider/introduction_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:inTime/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoarding extends StatelessWidget {
+  onBoarded() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setBool('onboarded', true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,7 +24,7 @@ class OnBoarding extends StatelessWidget {
                 width: 350,
               ),
             ),
-            title: Padding(
+            title: const Padding(
               padding: EdgeInsets.only(
                 bottom: 20,
               ),
@@ -119,7 +125,7 @@ class OnBoarding extends StatelessWidget {
           ),
         ],
         done: Done(
-          child: ElevatedButton(
+          child: TextButton(
             child: Text(
               'Commencer !',
               style: TextStyle(
@@ -127,7 +133,10 @@ class OnBoarding extends StatelessWidget {
                 color: Colors.deepOrange,
               ),
             ),
-            onPressed: null,
+            onPressed: () {
+              onBoarded();
+              Navigator.pushNamed(context, LoginPage.id);
+            },
           ),
           home: LoginPage(title: 'inTime'),
         ),
