@@ -158,19 +158,38 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // FloatingActionButton(
+                    //   onPressed: (){
+                    //     _pickImage();
+                    //   },
+                    //   child:  _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,):Text('qll'),
+                    //   ),
                     CircleAvatar(
-                      radius: 45,
-                      child: IconButton(
-                        onPressed: (){
-                          _pickImage();
-                        }, 
-                        icon: const Icon(Icons.dangerous),
-                        ),
+                      radius: 50,
+                      child: Column(
+                        children: [
+                          _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,): Text('Image'),
+                          IconButton(onPressed: (){_pickImage();}, icon: Icon(Icons.camera))
+                    
+                        ],
+                      )
+                      //  Stack(
+                      //   alignment: Alignment.bottomCenter,
+                      //   children: [
+                      //      _
+                      //   ],
+                      // )
+                      // IconButton(
+                      //   onPressed: (){
+                      //     _pickImage();
+                      //   }, 
+                      //   icon:  _selectedImage != null ? Image.file(_selectedImage!, fit: BoxFit.cover,):Icon(Icons.camera),
+                      //   ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                     _selectedImage != null ? Image.file(_selectedImage!):Text('qll'),
+                    //  _selectedImage != null ? Image.file(_selectedImage!):Text('qll'),
                     const Text(
                       'Nafo Noura',
                       style: TextStyle(color: Colors.white, fontSize: 20),
