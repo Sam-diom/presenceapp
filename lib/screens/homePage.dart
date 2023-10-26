@@ -33,9 +33,6 @@ class _HomePageState extends State<HomePage> {
       today = Selectedday;
     });
   }
-
-  @override
-  Widget build(BuildContext context) {
     List<String> mois = [
       'Janvier',
       'Février',
@@ -77,86 +74,88 @@ class _HomePageState extends State<HomePage> {
         loading = false;
       });
     }
-
+    @override
+    Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
           'inTime',
           style: TextStyle(color: Colors.black),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0, top: 15.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Months',
-                    style: TextStyle(fontSize: 25, color: Colors.teal),
-                  ),
-                ],
-              ),
+      body:  SafeArea(
+        child:  Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0, top: 15.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Months',
+                  style: TextStyle(fontSize: 25, color: Colors.teal),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 5.0, bottom: 15.0, left: 15.0, right: 15.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: monthScreen(mois: mois),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 5.0, bottom: 15.0, left: 15.0, right: 15.0),
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: monthScreen(mois: mois),
             ),
-            SizedBox(
-              height: 10,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Days',
+                  style: TextStyle(fontSize: 25, color: Colors.teal),
+                ),
+              ],
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Days',
-                    style: TextStyle(fontSize: 25, color: Colors.teal),
-                  ),
-                ],
-              ),
-            ),
+          ),
 
-            Container(
-              child: TableCalendar(
-                locale: 'en_US',
-                rowHeight: 43,
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true, 
+          Container(
+            child: TableCalendar(
+              locale: 'en_US',
+              rowHeight: 43,
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true, 
+              ),
+              availableGestures: AvailableGestures.all,
+              selectedDayPredicate: (day)=>isSameDay(day, today),
+              onDaySelected: _onDaySelected,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarStyle: const CalendarStyle(
+                todayTextStyle: TextStyle(
+                  color: Colors.white,
                 ),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day)=>isSameDay(day, today),
-                onDaySelected: _onDaySelected,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle: const CalendarStyle(
-                  todayTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  selectedDecoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.teal
-                  ),
-                  outsideDaysVisible: false,
+                selectedDecoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: Colors.teal
                 ),
-                focusedDay: today ,
-                firstDay: DateTime.utc(2017, 12, 10),
-                lastDay: DateTime.utc(2030, 11, 20),
-              )
-              )
-          ],
-        ),
+                outsideDaysVisible: false,
+              ),
+              focusedDay: today ,
+              firstDay: DateTime.utc(2017, 12, 10),
+              lastDay: DateTime.utc(2030, 11, 20),
+            )
+            )
+        ],
       ),
+      ),
+     
       drawer: Drawer(
         child: Column(
           children: [
@@ -187,7 +186,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child:  _selectedImage != null ? CircleAvatar(
                            backgroundImage: FileImage(_selectedImage!,)
-                           ):Center(child: Text('Share Image')),
+                           ):const Center(child: Text('Share Image')),
                         ),
                         Positioned(
                           bottom: 0,
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                             child: IconButton(
                               onPressed:(){
                                 _pickImage();
-                              }, icon: Icon(Icons.edit)
+                              }, icon: const Icon(Icons.edit)
                               ),
                           )
                         )
@@ -215,9 +214,9 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const Text(
-                      'Nafo Noura',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                     Text(
+                       widget.userConnect,
+                      style:const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ],
                 ),
@@ -229,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
+                      return  Container(
                           child: ListTile(
                         title: Text(drawerList[index]),
                         trailing: ((drawerList[index] == 'Déconnexion') &&
@@ -255,41 +254,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(200), 
-        ),
-        child: BottomNavigationBar(
-            selectedItemColor: Colors.teal,
-            backgroundColor: Colors.white,
-            elevation: 20,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    color: Colors.teal,
-                  ),
-                  label: 'Accueil'
-                  ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.book,
-                  color: Colors.teal,
-                ),
-                label: 'Presence',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.qr_code,
-                  color: Colors.teal,
-                ),
-                label: 'QR code',
-              ),
-            ]),
-      ),
     );
   }
+
+    
    Future _pickImage() async {
       final returnImage = await ImagePicker().pickImage(source: ImageSource.gallery);
      
