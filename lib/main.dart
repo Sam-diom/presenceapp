@@ -41,8 +41,9 @@ class MyApp extends StatelessWidget {
         NavigationPage.id: (context) => NavigationPage(),
         LoginPage.id: (context) => LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
+        BottomNavBar.id:(context) => const BottomNavBar(),
         HomePage.id: (context) => const HomePage(userConnect: ''),
-        BottomNavBar.id:(context) => BottomNavBar(),
+        
       },
     );
   }
