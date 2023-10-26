@@ -209,13 +209,12 @@ class _HomePageState extends State<HomePage> {
                               }, icon: Icon(Icons.edit)
                               ),
                           )
-                          )
+                        )
                       ],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    //  _selectedImage != null ? Image.file(_selectedImage!):Text('qll'),
                     const Text(
                       'Nafo Noura',
                       style: TextStyle(color: Colors.white, fontSize: 20),
@@ -268,16 +267,17 @@ class _HomePageState extends State<HomePage> {
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.book,
+                    Icons.home,
                     color: Colors.teal,
                   ),
-                  label: 'Presence'),
+                  label: 'Accueil'
+                  ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  Icons.home,
+                  Icons.book,
                   color: Colors.teal,
                 ),
-                label: 'Accueil',
+                label: 'Presence',
               ),
               BottomNavigationBarItem(
                 icon: Icon(

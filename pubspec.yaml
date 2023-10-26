@@ -52,7 +52,7 @@ dependencies:
 
 flutter_native_splash:
   color: "#FFFFFF"
-  image: assets/splash/splash.jpg
+  image: assets/splash/splash.png
 
 dev_dependencies:
   flutter_test:
