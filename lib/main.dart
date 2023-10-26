@@ -7,6 +7,7 @@ import 'package:presenceapp/utils/onBoarding.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'login_screen.dart';
+import 'screens/qr_code.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          color: Colors.white
-        )
-     ),
+      theme: ThemeData(appBarTheme: const AppBarTheme(color: Colors.white)),
       debugShowCheckedModeBanner: false,
       // ...
       localizationsDelegates: const [
@@ -38,6 +35,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
+
       initialRoute: LoginPage.id,
       routes: {
         LoginPage.id: (context) => OnBoarding(),

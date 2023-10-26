@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter/services.dart';
+
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -20,52 +23,72 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
-  
-  void _onDaySelected(DateTime Selectedday, DateTime focusDay){
+
+  void _onDaySelected(DateTime Selectedday, DateTime focusDay) {
+    setState(() {
+      today = Selectedday;
+    });
+  }
+
+  var getResult = 'QR Code Result';
+
+  void scanQRCode() async {
+    try {
+      final qrCode = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      if (!mounted) return;
+
       setState(() {
-        today = Selectedday;
+        getResult = qrCode;
       });
+      print("QRCode_Result:--");
+      print(qrCode);
+    } on PlatformException {
+      getResult = 'Failed to scan QR Code.';
     }
+  }
+
+  List<String> mois = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
+  ];
+
+  List<String> days = [
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+  ];
+
+  List<String> drawerList = [
+    'Mon Compte',
+    'Paramètres',
+    'Partager',
+  ];
+
   @override
   Widget build(BuildContext context) {
-    List<String> mois = [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre',
-    ];
-
-    List<String> days = [
-      'Lundi',
-      'Mardi',
-      'Mercredi',
-      'Jeudi',
-      'Vendredi',
-      'Samedi',
-    ];
-
-    List<String> drawerList = [
-      'Mon Compte',
-      'Paramètres',
-      'Partager',
-    ];
-
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
           'inTime',
           style: TextStyle(color: Colors.black),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: Column(
@@ -105,32 +128,29 @@ class _HomePageState extends State<HomePage> {
             ),
 
             Container(
-              child: TableCalendar(
-                locale: 'en_US',
-                rowHeight: 43,
-                headerStyle: const HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true, 
+                child: TableCalendar(
+              locale: 'en_US',
+              rowHeight: 43,
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
+              ),
+              availableGestures: AvailableGestures.all,
+              selectedDayPredicate: (day) => isSameDay(day, today),
+              onDaySelected: _onDaySelected,
+              startingDayOfWeek: StartingDayOfWeek.monday,
+              calendarStyle: const CalendarStyle(
+                todayTextStyle: TextStyle(
+                  color: Colors.white,
                 ),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day)=>isSameDay(day, today),
-                onDaySelected: _onDaySelected,
-                startingDayOfWeek: StartingDayOfWeek.monday,
-                calendarStyle: const CalendarStyle(
-                  todayTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  selectedDecoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.teal
-                  ),
-                  outsideDaysVisible: false,
-                ),
-                focusedDay: today ,
-                firstDay: DateTime.utc(2017, 12, 10),
-                lastDay: DateTime.utc(2030, 11, 20),
-              )
-              )
+                selectedDecoration: BoxDecoration(
+                    shape: BoxShape.rectangle, color: Colors.teal),
+                outsideDaysVisible: false,
+              ),
+              focusedDay: today,
+              firstDay: DateTime.utc(2017, 12, 10),
+              lastDay: DateTime.utc(2030, 11, 20),
+            ))
             // Expanded(
             //   child: SizedBox(
             //     width: MediaQuery.of(context).size.width,
@@ -168,31 +188,31 @@ class _HomePageState extends State<HomePage> {
                   color: const Color.fromARGB(255, 26, 34, 45),
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
+                    const CircleAvatar(
                       radius: 45,
                       child: Icon(Icons.account_circle),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text(
-                      'Nafo Noura',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      widget.userConnect,
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ],
                 ),
               ),
             ),
             Expanded(
-              child: SizedBox( 
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
+                      return SizedBox(
                           child: ListTile(
                         title: Text(drawerList[index]),
                         trailing: IconButton(
@@ -216,10 +236,10 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: BottomNavigationBar(
-           selectedItemColor: Colors.teal,
+            selectedItemColor: Colors.teal,
             backgroundColor: Colors.white,
             elevation: 20,
-            items: const [
+            items: [
               BottomNavigationBarItem(
                   icon: Icon(
                     Icons.book,
@@ -234,9 +254,11 @@ class _HomePageState extends State<HomePage> {
                 label: 'Accueil',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.qr_code,
-                  color: Colors.teal,
+                icon: IconButton(
+                  onPressed: () {
+                    scanQRCode();
+                  },
+                  icon: Icon(Icons.qr_code, color: Colors.teal),
                 ),
                 label: 'QR code',
               ),
@@ -263,7 +285,7 @@ class monthScreen extends StatelessWidget {
           return const SizedBox(
             width: 5,
           );
-        },  
+        },
         itemBuilder: (BuildContext context, int index) {
           return Container(
             width: 120,
@@ -273,17 +295,16 @@ class monthScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 minimumSize: const Size(50, 5),
-                backgroundColor: (DateTime.now().month ==
-                        mois.indexOf(mois[index]) + 1)
-                    ? Colors.white
-                    : Colors.teal,
+                backgroundColor:
+                    (DateTime.now().month == mois.indexOf(mois[index]) + 1)
+                        ? Colors.white
+                        : Colors.teal,
               ),
               onPressed: () {},
               child: Text(
                 mois[index],
                 style: TextStyle(
-                  color: (DateTime.now().month ==
-                          mois.indexOf(mois[index]) + 1)
+                  color: (DateTime.now().month == mois.indexOf(mois[index]) + 1)
                       ? Colors.teal
                       : Colors.white,
                 ),
@@ -308,8 +329,7 @@ class elements extends StatelessWidget {
       width: 150,
       height: 150,
       decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(15)
-        ),
+          color: Colors.blue, borderRadius: BorderRadius.circular(15)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
