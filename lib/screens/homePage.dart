@@ -240,13 +240,13 @@ class _HomePageState extends State<HomePage> {
             backgroundColor: Colors.white,
             elevation: 20,
             items: [
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.book,
                     color: Colors.teal,
                   ),
                   label: 'Presence'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home,
                   color: Colors.teal,
@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     scanQRCode();
                   },
-                  icon: Icon(Icons.qr_code, color: Colors.teal),
+                  icon: const Icon(Icons.qr_code, color: Colors.teal),
                 ),
                 label: 'QR code',
               ),

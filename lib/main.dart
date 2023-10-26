@@ -7,7 +7,7 @@ import 'package:presenceapp/utils/onBoarding.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'login_screen.dart';
-import 'screens/qr_code.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
