@@ -16,6 +16,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   static const List<Widget> tabs = [
     HomePage(userConnect: ''),
     PresenceScreen(),
+    
   ];
   @override
   Widget build(BuildContext context) {
