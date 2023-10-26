@@ -2,11 +2,12 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:presenceapp/app_localizations.dart';
-import 'package:presenceapp/register_screen.dart';
-import 'package:presenceapp/screens/homePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
+import 'register_screen.dart';
+import 'screens/homePage.dart';
 
 const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
@@ -35,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       currentLocale = newLocale;
     });
+  }
+
+  _connected() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', true);
   }
 
   void verif(

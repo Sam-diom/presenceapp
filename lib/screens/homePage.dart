@@ -1,8 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter/services.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../login_screen.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -14,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  File? _selectedImage;
   DateTime today = DateTime.now();
   DateTime? _selectedDay;
 
@@ -23,6 +30,11 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   void _onDaySelected(DateTime Selectedday, DateTime focusDay) {
     setState(() {
@@ -30,24 +42,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  var getResult = 'QR Code Result';
-
-  void scanQRCode() async {
-    try {
-      final qrCode = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-
-      if (!mounted) return;
-
-      setState(() {
-        getResult = qrCode;
-      });
-      print("QRCode_Result:--");
-      print(qrCode);
-    } on PlatformException {
-      getResult = 'Failed to scan QR Code.';
-    }
-  }
+  
 
   List<String> mois = [
     'Janvier',
@@ -78,6 +73,17 @@ class _HomePageState extends State<HomePage> {
     'Paramètres',
     'Partager',
   ];
+  bool loading = false;
+  _logOut() async {
+    setState(() {
+      loading = true;
+    });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', false);
+    setState(() {
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +100,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             const Padding(
-              padding: EdgeInsets.only(left: 16.0, top: 5.0),
+              padding: EdgeInsets.only(left: 16.0, top: 15.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -114,6 +120,9 @@ class _HomePageState extends State<HomePage> {
                 child: monthScreen(mois: mois),
               ),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             const Padding(
               padding: EdgeInsets.only(left: 16.0),
               child: Row(
@@ -126,8 +135,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
-            Container(
+            SizedBox(
                 child: TableCalendar(
               locale: 'en_US',
               rowHeight: 43,
@@ -151,27 +159,6 @@ class _HomePageState extends State<HomePage> {
               firstDay: DateTime.utc(2017, 12, 10),
               lastDay: DateTime.utc(2030, 11, 20),
             ))
-            // Expanded(
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 540,
-            //     child: GridView.builder(
-            //       scrollDirection: Axis.vertical,
-            //       itemCount: days.length,
-            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 2),
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Card(
-            //           shape: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(20)),
-            //           margin: const EdgeInsets.all(15),
-            //           elevation: 4,
-            //           child: Center(child: Text(days[index])),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),
@@ -182,18 +169,53 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: 300,
-                height: 200,
+                height: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255, 26, 34, 45),
+                  color: Colors.teal,
                 ),
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const CircleAvatar(
-                      radius: 45,
-                      child: Icon(Icons.account_circle),
+                    Stack(
+                      children: [
+                        Container(
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 4,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: _selectedImage != null
+                              ? CircleAvatar(
+                                  backgroundImage: FileImage(
+                                  _selectedImage!,
+                                ))
+                              : const Center(child: Text('Share Image')),
+                        ),
+                        Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(width: 1, color: Colors.white),
+                                color: Colors.teal,
+                              ),
+                              child: IconButton(
+                                  onPressed: () {
+                                    _pickImage();
+                                  },
+                                  icon: const Icon(Icons.edit)),
+                            ))
+                      ],
                     ),
                     const SizedBox(
                       height: 20,
@@ -207,6 +229,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
+                child: SizedBox(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -215,10 +238,18 @@ class _HomePageState extends State<HomePage> {
                       return SizedBox(
                           child: ListTile(
                         title: Text(drawerList[index]),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.arrow_forward_ios),
-                        ),
+                        trailing: ((drawerList[index] == 'Déconnexion') &&
+                                (loading == true))
+                            ? const CircularProgressIndicator()
+                            : IconButton(
+                                onPressed: () {
+                                  if (drawerList[index] == 'Déconnexion') {
+                                    _logOut();
+                                    Navigator.pushNamed(context, LoginPage.id);
+                                  }
+                                },
+                                icon: const Icon(Icons.arrow_forward_ios),
+                              ),
                       ));
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -226,45 +257,21 @@ class _HomePageState extends State<HomePage> {
                     },
                     itemCount: drawerList.length),
               ),
-            )
+            ))
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: BottomNavigationBar(
-            selectedItemColor: Colors.teal,
-            backgroundColor: Colors.white,
-            elevation: 20,
-            items: [
-              const BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.book,
-                    color: Colors.teal,
-                  ),
-                  label: 'Presence'),
-              const BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.teal,
-                ),
-                label: 'Accueil',
-              ),
-              BottomNavigationBarItem(
-                icon: IconButton(
-                  onPressed: () {
-                    scanQRCode();
-                  },
-                  icon: const Icon(Icons.qr_code, color: Colors.teal),
-                ),
-                label: 'QR code',
-              ),
-            ]),
-      ),
     );
+  }
+
+  Future _pickImage() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnImage == null) return;
+    setState(() {
+      _selectedImage = File(returnImage.path);
+    });
   }
 }
 
@@ -287,7 +294,7 @@ class monthScreen extends StatelessWidget {
           );
         },
         itemBuilder: (BuildContext context, int index) {
-          return Container(
+          return SizedBox(
             width: 120,
             height: 50,
             child: ElevatedButton(

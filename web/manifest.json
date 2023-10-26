@@ -1,6 +1,6 @@
 {
-    "name": "presenceapp",
-    "short_name": "presenceapp",
+    "name": "inTime",
+    "short_name": "inTime",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

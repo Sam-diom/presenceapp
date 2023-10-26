@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:presenceapp/register_screen.dart';
-import 'package:presenceapp/screens/homePage.dart';
 
-import 'package:presenceapp/utils/onBoarding.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'login_screen.dart';
-
+import 'navigation.dart';
+import 'register_screen.dart';
+import 'screens/bottomNavBar.dart';
+import 'screens/homePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,12 +35,13 @@ class MyApp extends StatelessWidget {
       ],
       locale: const Locale('en', 'US'), // Locale par défaut
       title: 'MyPresence',
-
-      initialRoute: LoginPage.id,
+      initialRoute: NavigationPage.id,
       routes: {
-        LoginPage.id: (context) => OnBoarding(),
+        NavigationPage.id: (context) => NavigationPage(),
+        LoginPage.id: (context) => const LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
         HomePage.id: (context) => const HomePage(userConnect: ''),
+        BottomNavBar.id: (context) => const BottomNavBar(),
       },
     );
   }

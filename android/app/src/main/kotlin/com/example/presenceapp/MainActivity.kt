@@ -1,4 +1,4 @@
-package com.example.presenceapp
+package com.example.inTime
 
 import io.flutter.embedding.android.FlutterActivity
 
