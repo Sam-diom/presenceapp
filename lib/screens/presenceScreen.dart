@@ -13,7 +13,7 @@ class _PresenceScreenState extends State<PresenceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Text('nothing for moment'),
+        child: Center(child: Text('nothing for moment')),
       ),
     );
   }
