@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:inTime/app_localizations.dart';
 import 'package:inTime/register_screen.dart';
+import 'package:inTime/screens/bottomNavBar.dart';
 import 'package:inTime/screens/homePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
         _connected();
         Navigator.pop(context);
         MaterialPageRoute newRoute = MaterialPageRoute(
-            builder: ((context) => HomePage(userConnect: userConnect)));
+            builder: ((context) => BottomNavBar()));
         Navigator.pushReplacement(context, newRoute);
         setState(() {
           controllerEmail.text = "";

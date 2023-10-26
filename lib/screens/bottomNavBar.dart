@@ -13,15 +13,14 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
-  static const List<Widget> tabs = [
+   List tabs = [
     HomePage(userConnect: ''),
     PresenceScreen(),
-    
+    PresenceScreen(),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: tabs[_selectedIndex],
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       bottomNavigationBar: Container(
         height: 80,
@@ -63,6 +62,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
             ]),
       ),
+      body: tabs[_selectedIndex],
     );
   }
 }
