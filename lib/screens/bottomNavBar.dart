@@ -38,7 +38,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
             currentIndex: _selectedIndex,
             onTap: (index) {
               setState(() {
-                _selectedIndex = index;
+                if (index != 2) {
+                  _selectedIndex = index;
+                }
               });
             },
             elevation: 20,
@@ -80,6 +82,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
           '#ff6666', 'Cancel', true, ScanMode.QR);
 
       if (!mounted) return;
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text("Présence confirmée"),
+            );
+          });
 
       setState(() {
         getResult = qrCode;
