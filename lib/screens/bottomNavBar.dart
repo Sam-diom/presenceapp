@@ -81,14 +81,32 @@ class _BottomNavBarState extends State<BottomNavBar> {
       final qrCode = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
 
-      if (!mounted) return;
-      showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              content: Text("Présence confirmée"),
-            );
-          });
+      if (!mounted) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.check,
+                        size: 100,
+                        color: Colors.teal,
+                      ),
+                      Text(
+                        "Présence confirmée",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            });
+      }
 
       setState(() {
         getResult = qrCode;
