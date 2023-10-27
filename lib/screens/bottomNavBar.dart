@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'homePage.dart';
 import 'presenceScreen.dart';
-import 'qr_code_page.dart';
 
 class BottomNavBar extends StatefulWidget {
   static const String id = 'navBar';
@@ -18,7 +19,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   List tabs = const [
     HomePage(userConnect: ''),
     PresenceScreen(),
-    QrCodeScannePage()
   ];
 
   @override
@@ -42,14 +42,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
               });
             },
             elevation: 20,
-            items: const [
-              BottomNavigationBarItem(
+            items: [
+              const BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
                     color: Colors.teal,
                   ),
                   label: 'Accueil'),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.book,
                   color: Colors.teal,
@@ -57,14 +57,37 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 label: 'Presence',
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.qr_code,
-                  color: Colors.teal,
-                ),
+                icon: IconButton(
+                    onPressed: () {
+                      scanQRCode();
+                    },
+                    icon: const Icon(
+                      Icons.qr_code,
+                      color: Colors.teal,
+                    )),
                 label: 'QR code',
               ),
             ]),
       ),
     );
+  }
+
+  var getResult = 'QR Code Result';
+
+  void scanQRCode() async {
+    try {
+      final qrCode = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.QR);
+
+      if (!mounted) return;
+
+      setState(() {
+        getResult = qrCode;
+      });
+      print("QRCode_Result:--");
+      print(qrCode);
+    } on PlatformException {
+      getResult = 'Failed to scan QR Code.';
+    }
   }
 }

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'register_screen.dart';
+import 'screens/bottomNavBar.dart';
 import 'screens/homePage.dart';
 
 const String registerPageTitle = 'Register UI';
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
           passwordConnect == controllerPassword1.text.trim()) {
         Navigator.pop(context);
         MaterialPageRoute newRoute = MaterialPageRoute(
-            builder: ((context) => HomePage(userConnect: userConnect)));
+            builder: ((context) =>const BottomNavBar()));
         Navigator.pushReplacement(context, newRoute);
         setState(() {
           controllerEmail.text = "";
