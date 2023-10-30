@@ -12,6 +12,7 @@ import 'screens/homePage.dart';
 
 const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
+String userConnect = "";
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login';
@@ -24,7 +25,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String userConnect = "";
   String emailConnect = "";
   String passwordConnect = '';
   late TextEditingController controllerEmail;
@@ -87,8 +87,8 @@ class _LoginPageState extends State<LoginPage> {
       if (emailConnect == controllerEmail1.text.trim() &&
           passwordConnect == controllerPassword1.text.trim()) {
         Navigator.pop(context);
-        MaterialPageRoute newRoute = MaterialPageRoute(
-            builder: ((context) =>const BottomNavBar()));
+        MaterialPageRoute newRoute =
+            MaterialPageRoute(builder: ((context) => const BottomNavBar()));
         Navigator.pushReplacement(context, newRoute);
         setState(() {
           controllerEmail.text = "";

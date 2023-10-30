@@ -12,8 +12,11 @@ import '../login_screen.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
-  const HomePage({super.key, required this.userConnect});
   final String userConnect;
+  const HomePage({
+    super.key,
+    required this.userConnect,
+  });
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -41,8 +45,6 @@ class _HomePageState extends State<HomePage> {
       today = Selectedday;
     });
   }
-
-  
 
   List<String> mois = [
     'Janvier',
