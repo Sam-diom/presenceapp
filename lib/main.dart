@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inTime/navigation.dart';
 import 'package:inTime/register_screen.dart';
+import 'package:inTime/screens/bottomNavBar.dart';
 import 'package:inTime/screens/homePage.dart';
 import 'package:inTime/screens/presenceScreen.dart';
 import 'package:inTime/utils/onBoarding.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         LoginPage.id: (context) => LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
         HomePage.id: (context) => const HomePage(userConnect: ''),
+        BottomNavBar.id:(context) => BottomNavBar(),
       },
     );
   }
