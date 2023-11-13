@@ -22,6 +22,7 @@ class _MongoDbDisplayState extends State<MongoDbDisplay> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Bonjour ${widget.userConnect}"),
+        backgroundColor: Colors.pink,
         actions: [
           IconButton(
               onPressed: () async {
