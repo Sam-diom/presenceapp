@@ -61,9 +61,6 @@ class _NavigationPageState extends State<NavigationPage> {
             )
           : connected!
               ? const BottomNavBar()
-              // HomePage(
-              //     userConnect: '',
-              //   )
               : onboarded!
                   ? const LoginPage(title: "inTime")
                   : OnBoarding(),
