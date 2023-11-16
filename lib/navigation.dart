@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inTime/login_screen.dart';
+import 'package:inTime/screens/bottomNavBar.dart';
 import 'package:inTime/screens/homePage.dart';
 import 'package:inTime/utils/onBoarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,9 +60,7 @@ class _NavigationPageState extends State<NavigationPage> {
               ),
             )
           : connected!
-              ? const HomePage(
-                  userConnect: '',
-                )
+              ? const BottomNavBar()
               : onboarded!
                   ? const LoginPage(title: "inTime")
                   : OnBoarding(),

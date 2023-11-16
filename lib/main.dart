@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inTime/navigation.dart';
 import 'package:inTime/register_screen.dart';
+import 'package:inTime/screens/bottomNavBar.dart';
 import 'package:inTime/screens/homePage.dart';
 
 import 'app_localizations.dart';
@@ -37,8 +38,9 @@ class MyApp extends StatelessWidget {
       initialRoute: NavigationPage.id,
       routes: {
         NavigationPage.id: (context) => NavigationPage(),
-        LoginPage.id: (context) => LoginPage(title: 'inTime'),
+        LoginPage.id: (context) => const LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
+        BottomNavBar.id: (context) => const BottomNavBar(),
         HomePage.id: (context) => const HomePage(userConnect: ''),
       },
     );

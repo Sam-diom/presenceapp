@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:inTime/login_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../login_screen.dart';
+
 class HomePage extends StatefulWidget {
   static const String id = 'home';
-  const HomePage({super.key, required this.userConnect});
+  const HomePage({Key? key, required this.userConnect}) : super(key: key);
   final String userConnect;
 
   @override
@@ -13,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  File? _selectedImage;
   DateTime today = DateTime.now();
   DateTime? _selectedDay;
 
@@ -29,57 +34,54 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  List<String> mois = [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
+  ];
+
+  List<String> days = [
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi'
+  ];
+
+  List<String> drawerList = ['Mon Compte', 'Paramètres', 'Déconnexion'];
+
+  bool loading = false;
+  _logOut() async {
+    setState(() {
+      loading = true;
+    });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', false);
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> mois = [
-      'Janvier',
-      'Février',
-      'Mars',
-      'Avril',
-      'Mai',
-      'Juin',
-      'Juillet',
-      'Août',
-      'Septembre',
-      'Octobre',
-      'Novembre',
-      'Décembre',
-    ];
-
-    List<String> days = [
-      'Lundi',
-      'Mardi',
-      'Mercredi',
-      'Jeudi',
-      'Vendredi',
-      'Samedi',
-    ];
-
-    List<String> drawerList = [
-      'Mon Compte',
-      'Paramètres',
-      'Déconnexion',
-    ];
-    bool loading = false;
-    _logOut() async {
-      setState(() {
-        loading = true;
-      });
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setBool('connected', false);
-      setState(() {
-        loading = false;
-      });
-    }
-
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text(
           'inTime',
           style: TextStyle(color: Colors.black),
         ),
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SafeArea(
         child: Column(
@@ -105,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                 child: monthScreen(mois: mois),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             const Padding(
@@ -120,52 +122,31 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
             Container(
-                child: TableCalendar(
-              locale: 'en_US',
-              rowHeight: 43,
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-              ),
-              availableGestures: AvailableGestures.all,
-              selectedDayPredicate: (day) => isSameDay(day, today),
-              onDaySelected: _onDaySelected,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: const CalendarStyle(
-                todayTextStyle: TextStyle(
-                  color: Colors.white,
+              child: TableCalendar(
+                locale: 'en_US',
+                rowHeight: 43,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
                 ),
-                selectedDecoration: BoxDecoration(
-                    shape: BoxShape.rectangle, color: Colors.teal),
-                outsideDaysVisible: false,
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day) => isSameDay(day, today),
+                onDaySelected: _onDaySelected,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                calendarStyle: const CalendarStyle(
+                  todayTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                      shape: BoxShape.rectangle, color: Colors.teal),
+                  outsideDaysVisible: false,
+                ),
+                focusedDay: today,
+                firstDay: DateTime.utc(2017, 12, 10),
+                lastDay: DateTime.utc(2030, 11, 20),
               ),
-              focusedDay: today,
-              firstDay: DateTime.utc(2017, 12, 10),
-              lastDay: DateTime.utc(2030, 11, 20),
-            ))
-            // Expanded(
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 540,
-            //     child: GridView.builder(
-            //       scrollDirection: Axis.vertical,
-            //       itemCount: days.length,
-            //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //           crossAxisCount: 2),
-            //       itemBuilder: (BuildContext context, int index) {
-            //         return Card(
-            //           shape: OutlineInputBorder(
-            //               borderRadius: BorderRadius.circular(20)),
-            //           margin: const EdgeInsets.all(15),
-            //           elevation: 4,
-            //           child: Center(child: Text(days[index])),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // )
+            )
           ],
         ),
       ),
@@ -176,25 +157,61 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(15.0),
               child: Container(
                 width: 300,
-                height: 200,
+                height: 250,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: const Color.fromARGB(255, 26, 34, 45),
+                  color: Colors.teal,
                 ),
                 padding: const EdgeInsets.all(10),
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 45,
-                      child: Icon(Icons.account_circle),
+                    Stack(
+                      children: [
+                        Container(
+                          width: 130,
+                          height: 130,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 4,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: _selectedImage != null
+                              ? CircleAvatar(
+                                  backgroundImage: FileImage(
+                                    _selectedImage!,
+                                  ),
+                                )
+                              : const Center(child: Text('Share Image')),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(width: 1, color: Colors.white),
+                              color: Colors.teal,
+                            ),
+                            child: IconButton(
+                                onPressed: () {
+                                  _pickImage();
+                                },
+                                icon: const Icon(Icons.edit)),
+                          ),
+                        )
+                      ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text(
-                      'Nafo Noura',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      widget.userConnect,
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ],
                 ),
@@ -205,9 +222,9 @@ class _HomePageState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          child: ListTile(
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      child: ListTile(
                         title: Text(drawerList[index]),
                         trailing: ((drawerList[index] == 'Déconnexion') &&
                                 (loading == true))
@@ -216,63 +233,44 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                   if (drawerList[index] == 'Déconnexion') {
                                     _logOut();
-                                    Navigator.pushNamed(context, LoginPage.id);
+                                    Navigator.pushReplacementNamed(
+                                        context, LoginPage.id);
                                   }
                                 },
                                 icon: const Icon(Icons.arrow_forward_ios),
                               ),
-                      ));
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider();
-                    },
-                    itemCount: drawerList.length),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider();
+                  },
+                  itemCount: drawerList.length,
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.sizeOf(context).height / 9,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: BottomNavigationBar(
-            selectedItemColor: Colors.teal,
-            backgroundColor: Colors.white,
-            elevation: 20,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.book,
-                    color: Colors.teal,
-                  ),
-                  label: 'Presence'),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: Colors.teal,
-                ),
-                label: 'Accueil',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.qr_code,
-                  color: Colors.teal,
-                ),
-                label: 'QR code',
-              ),
-            ]),
-      ),
     );
+  }
+
+  Future _pickImage() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnImage == null) return;
+    setState(() {
+      _selectedImage = File(returnImage!.path);
+    });
   }
 }
 
 class monthScreen extends StatelessWidget {
   const monthScreen({
-    super.key,
+    Key? key,
     required this.mois,
-  });
+  }) : super(key: key);
 
   final List<String> mois;
 
@@ -317,10 +315,11 @@ class monthScreen extends StatelessWidget {
 
 class elements extends StatelessWidget {
   const elements({
-    super.key,
+    Key? key,
     required this.icon,
     required this.title,
-  });
+  }) : super(key: key);
+
   final String title;
   final Icon icon;
   @override
