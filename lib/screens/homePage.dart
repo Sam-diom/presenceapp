@@ -18,9 +18,26 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File? _selectedImage;
   DateTime today = DateTime.now();
-  // DateTime? _selectedDay;
 
-  // Map<DateTime, List<Event>> event = {};
+  bool loading = false;
+
+  void _performLogout() async {
+    setState(() {
+      loading = true;
+    });
+
+    await _logOut();
+
+    setState(() {
+      loading = false;
+    });
+  }
+
+  Future<void> _logOut() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', false);
+    Navigator.pushReplacementNamed(context, LoginPage.id);
+  }
 
   @override
   void dispose() {
@@ -59,18 +76,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool loading = false;
-    logout() async {
-      setState(() {
-        loading = true;
-      });
-      SharedPreferences pref = await SharedPreferences.getInstance();
-      pref.setBool('connected', false);
-      setState(() {
-        loading = false;
-      });
-    }
-
     List<Map<String, dynamic>> drawerList = [
       {'title': 'Mon Compte', 'icon': Icons.account_circle, 'onTap': () {}},
       {'title': 'Paramètres', 'icon': Icons.settings, 'onTap': () {}},
@@ -375,12 +380,9 @@ void _showLogoutConfirmationDialog(BuildContext context) {
               ),
             ),
           ),
-          TextButton(
-            onPressed: () {
-              // Performer les actions de déconnexion ici
-              Navigator.pushReplacementNamed(context, LoginPage.id);
-            },
-            child: const Text(
+          const TextButton(
+            onPressed: _logOut,
+            child: Text(
               'Déconnecter',
               style: TextStyle(color: Colors.red),
             ),
@@ -389,4 +391,9 @@ void _showLogoutConfirmationDialog(BuildContext context) {
       );
     },
   );
+}
+
+Future<void> _logOut() async {
+  SharedPreferences pref = await SharedPreferences.getInstance();
+  pref.setBool('connected', false);
 }
