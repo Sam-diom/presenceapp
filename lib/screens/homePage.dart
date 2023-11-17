@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:inTime/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import '../login_screen.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
@@ -19,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File? _selectedImage;
   DateTime today = DateTime.now();
-  DateTime? _selectedDay;
+  // DateTime? _selectedDay;
 
   // Map<DateTime, List<Event>> event = {};
 
@@ -58,22 +57,31 @@ class _HomePageState extends State<HomePage> {
     'Samedi'
   ];
 
-  List<String> drawerList = ['Mon Compte', 'Paramètres', 'Déconnexion'];
-
-  bool loading = false;
-  _logOut() async {
-    setState(() {
-      loading = true;
-    });
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('connected', false);
-    setState(() {
-      loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    bool loading = false;
+    logout() async {
+      setState(() {
+        loading = true;
+      });
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      pref.setBool('connected', false);
+      setState(() {
+        loading = false;
+      });
+    }
+
+    List<Map<String, dynamic>> drawerList = [
+      {'title': 'Mon Compte', 'icon': Icons.account_circle, 'onTap': () {}},
+      {'title': 'Paramètres', 'icon': Icons.settings, 'onTap': () {}},
+      {
+        'title': 'Déconnexion',
+        'icon': Icons.logout,
+        'onTap': () {
+          _showLogoutConfirmationDialog(context);
+        }
+      }
+    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -223,23 +231,12 @@ class _HomePageState extends State<HomePage> {
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      child: ListTile(
-                        title: Text(drawerList[index]),
-                        trailing: ((drawerList[index] == 'Déconnexion') &&
-                                (loading == true))
-                            ? const CircularProgressIndicator()
-                            : IconButton(
-                                onPressed: () {
-                                  if (drawerList[index] == 'Déconnexion') {
-                                    _logOut();
-                                    Navigator.pushReplacementNamed(
-                                        context, LoginPage.id);
-                                  }
-                                },
-                                icon: const Icon(Icons.arrow_forward_ios),
-                              ),
-                      ),
+                    var item = drawerList[index];
+
+                    return ListTile(
+                      title: Text(item['title']),
+                      leading: Icon(item['icon']),
+                      onTap: item['onTap'],
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -342,4 +339,54 @@ class elements extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showLogoutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Confirmation',
+          style: TextStyle(
+            color: Colors.teal, // Couleur du texte du titre
+          ),
+        ),
+        content: const Text(
+          'Êtes-vous sûr de vouloir vous déconnecter ?',
+          style: TextStyle(
+            color: Colors.black, // Couleur du texte du contenu
+          ),
+        ),
+        backgroundColor:
+            Colors.white, // Couleur de fond de la boîte de dialogue
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0), // Bordure arrondie
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Fermer la boîte de dialogue
+            },
+            child: const Text(
+              'Annuler',
+              style: TextStyle(
+                color: Colors.teal, // Couleur du texte du bouton
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // Performer les actions de déconnexion ici
+              Navigator.pushReplacementNamed(context, LoginPage.id);
+            },
+            child: const Text(
+              'Déconnecter',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }
