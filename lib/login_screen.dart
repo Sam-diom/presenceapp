@@ -1,11 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:inTime/app_localizations.dart';
 import 'package:inTime/register_screen.dart';
 import 'package:inTime/screens/bottomNavBar.dart';
-import 'package:inTime/screens/homePage.dart';
+// import 'package:inTime/screens/homePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bdHelper/mongoBdConnect.dart';
@@ -64,9 +63,6 @@ class _LoginPageState extends State<LoginPage> {
 
             userConnect = snapshots["lastName"] + " " + snapshots["firstName"];
           });
-
-          print(emailConnect);
-          print(passwordConnect);
         } else if (snapshots["email"] == controllerEmail1.text &&
             snapshots["password"] != controllerPassword1.text) {
           setState(() {
