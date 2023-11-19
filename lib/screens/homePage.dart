@@ -1,3 +1,11 @@
+/// Widget de la page d'accueil qui affiche l'écran d'accueil de l'application.
+///
+/// TableCalendar pour sélectionner des dates, des boutons de sélection de mois,
+/// le profil utilisateur et les paramètres dans le drawer, ainsi qu'une boîte de dialogue de confirmation
+///
+/// The state is managed by _HomePageState.
+// ignore_for_file: use_super_parameters, camel_case_types
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +16,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 class HomePage extends StatefulWidget {
   static const String id = 'home';
-  const HomePage({Key? key, required this.userConnect}) : super(key: key);
+  const HomePage({super.key, required this.userConnect});
   final String userConnect;
 
   @override
@@ -20,24 +28,6 @@ class _HomePageState extends State<HomePage> {
   DateTime today = DateTime.now();
 
   bool loading = false;
-
-  // void _performLogout() async {
-  //   setState(() {
-  //     loading = true;
-  //   });
-
-  //   await _logOut();
-
-  //   setState(() {
-  //     loading = false;
-  //   });
-  // }
-
-  // Future<void> _logOut() async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   pref.setBool('connected', false);
-  //   Navigator.pushReplacementNamed(context, LoginPage.id);
-  // }
 
   @override
   void dispose() {
@@ -105,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Months',
+                    'Mois',
                     style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
@@ -129,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Days',
+                    'Jours',
                     style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
@@ -197,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                     _selectedImage!,
                                   ),
                                 )
-                              : const Center(child: Text('Share Image')),
+                              : const Center(child: Text('Select Image')),
                         ),
                         Positioned(
                           bottom: 0,
@@ -268,6 +258,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// ignore: camel_case_types
 class monthScreen extends StatelessWidget {
   const monthScreen({
     Key? key,
@@ -348,10 +339,11 @@ class elements extends StatelessWidget {
 
 void _showLogoutConfirmationDialog(BuildContext context) {
   Future<void> _logOut() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  pref.setBool('connected', false);
-  Navigator.pushReplacementNamed(context, LoginPage.id);
-}
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', false);
+    Navigator.pushReplacementNamed(context, LoginPage.id);
+  }
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -385,7 +377,7 @@ void _showLogoutConfirmationDialog(BuildContext context) {
               ),
             ),
           ),
-           TextButton(
+          TextButton(
             onPressed: _logOut,
             child: Text(
               'Déconnecter',
@@ -396,6 +388,4 @@ void _showLogoutConfirmationDialog(BuildContext context) {
       );
     },
   );
-
 }
-
