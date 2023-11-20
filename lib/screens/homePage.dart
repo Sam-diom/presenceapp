@@ -1,9 +1,3 @@
-/// Widget de la page d'accueil qui affiche l'écran d'accueil de l'application.
-///
-/// TableCalendar pour sélectionner des dates, des boutons de sélection de mois,
-/// le profil utilisateur et les paramètres dans le drawer, ainsi qu'une boîte de dialogue de confirmation
-///
-/// The state is managed by _HomePageState.
 // ignore_for_file: use_super_parameters, camel_case_types
 
 import 'dart:io';
@@ -14,11 +8,13 @@ import 'package:inTime/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/// Widget de la page d'accueil qui affiche l'écran d'accueil de l'application.
 class HomePage extends StatefulWidget {
   static const String id = 'home';
   const HomePage({super.key, required this.userConnect});
   final String userConnect;
 
+  /// L'état est géré par _HomePageState.
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -64,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     'Samedi'
   ];
 
+  /// TableCalendar pour sélectionner des dates, des boutons de sélection de mois
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> drawerList = [
@@ -337,6 +334,7 @@ class elements extends StatelessWidget {
   }
 }
 
+/// le profil utilisateur et les paramètres dans le drawer, ainsi qu'une boîte de dialogue de confirmation de déconnexion
 void _showLogoutConfirmationDialog(BuildContext context) {
   Future<void> _logOut() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
