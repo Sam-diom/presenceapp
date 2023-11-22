@@ -1,21 +1,26 @@
+/// Widget de la page d'accueil qui affiche l'écran d'accueil de l'application.
+///
+/// TableCalendar pour sélectionner des dates, des boutons de sélection de mois,
+/// le profil utilisateur et les paramètres dans le drawer, ainsi qu'une boîte de dialogue de confirmation
+///
+/// The state is managed by _HomePageState.
+// ignore_for_file: use_super_parameters, camel_case_types
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:image_picker/image_picker.dart';
 
+import 'package:image_picker/image_picker.dart';
+import 'package:inTime/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../login_screen.dart';
-
 class HomePage extends StatefulWidget {
   static const String id = 'home';
-  final String userConnect;
+
   const HomePage({
     super.key,
-    required this.userConnect,
   });
 
   @override
@@ -25,9 +30,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   File? _selectedImage;
   DateTime today = DateTime.now();
-  DateTime? _selectedDay;
 
-  // Map<DateTime, List<Event>> event = {};
+  bool loading = false;
 
   @override
   void dispose() {
@@ -67,28 +71,22 @@ class _HomePageState extends State<HomePage> {
     'Mercredi',
     'Jeudi',
     'Vendredi',
-    'Samedi',
+    'Samedi'
   ];
-
-  List<String> drawerList = [
-    'Mon Compte',
-    'Paramètres',
-    'Partager',
-  ];
-  bool loading = false;
-  _logOut() async {
-    setState(() {
-      loading = true;
-    });
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setBool('connected', false);
-    setState(() {
-      loading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> drawerList = [
+      {'title': 'Mon Compte', 'icon': Icons.account_circle, 'onTap': () {}},
+      {'title': 'Paramètres', 'icon': Icons.settings, 'onTap': () {}},
+      {
+        'title': 'Déconnexion',
+        'icon': Icons.logout,
+        'onTap': () {
+          _showLogoutConfirmationDialog(context);
+        }
+      }
+    ];
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -107,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Months',
+                    'Mois',
                     style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
@@ -131,36 +129,37 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Days',
+                    'Jours',
                     style: TextStyle(fontSize: 25, color: Colors.teal),
                   ),
                 ],
               ),
             ),
-            SizedBox(
-                child: TableCalendar(
-              locale: 'en_US',
-              rowHeight: 43,
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-              ),
-              availableGestures: AvailableGestures.all,
-              selectedDayPredicate: (day) => isSameDay(day, today),
-              onDaySelected: _onDaySelected,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: const CalendarStyle(
-                todayTextStyle: TextStyle(
-                  color: Colors.white,
+            Container(
+              child: TableCalendar(
+                locale: 'en_US',
+                rowHeight: 43,
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
                 ),
-                selectedDecoration: BoxDecoration(
-                    shape: BoxShape.rectangle, color: Colors.teal),
-                outsideDaysVisible: false,
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day) => isSameDay(day, today),
+                onDaySelected: _onDaySelected,
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                calendarStyle: const CalendarStyle(
+                  todayTextStyle: TextStyle(
+                    color: Colors.white,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                      shape: BoxShape.rectangle, color: Colors.teal),
+                  outsideDaysVisible: false,
+                ),
+                focusedDay: today,
+                firstDay: DateTime.utc(2017, 12, 10),
+                lastDay: DateTime.utc(2030, 11, 20),
               ),
-              focusedDay: today,
-              firstDay: DateTime.utc(2017, 12, 10),
-              lastDay: DateTime.utc(2030, 11, 20),
-            ))
+            )
           ],
         ),
       ),
@@ -195,35 +194,36 @@ class _HomePageState extends State<HomePage> {
                           child: _selectedImage != null
                               ? CircleAvatar(
                                   backgroundImage: FileImage(
-                                  _selectedImage!,
-                                ))
-                              : const Center(child: Text('Share Image')),
+                                    _selectedImage!,
+                                  ),
+                                )
+                              : const Center(child: Text('Select Image')),
                         ),
                         Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(width: 1, color: Colors.white),
-                                color: Colors.teal,
-                              ),
-                              child: IconButton(
-                                  onPressed: () {
-                                    _pickImage();
-                                  },
-                                  icon: const Icon(Icons.edit)),
-                            ))
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(width: 1, color: Colors.white),
+                              color: Colors.teal,
+                            ),
+                            child: IconButton(
+                                onPressed: () {
+                                  _pickImage();
+                                },
+                                icon: const Icon(Icons.edit)),
+                          ),
+                        )
                       ],
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
-                      widget.userConnect,
+                      userConnect,
                       style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ],
@@ -236,30 +236,22 @@ class _HomePageState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: ListView.separated(
-                    itemBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                          child: ListTile(
-                        title: Text(drawerList[index]),
-                        trailing: ((drawerList[index] == 'Déconnexion') &&
-                                (loading == true))
-                            ? const CircularProgressIndicator()
-                            : IconButton(
-                                onPressed: () {
-                                  if (drawerList[index] == 'Déconnexion') {
-                                    _logOut();
-                                    Navigator.pushNamed(context, LoginPage.id);
-                                  }
-                                },
-                                icon: const Icon(Icons.arrow_forward_ios),
-                              ),
-                      ));
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider();
-                    },
-                    itemCount: drawerList.length),
+                  itemBuilder: (BuildContext context, int index) {
+                    var item = drawerList[index];
+
+                    return ListTile(
+                      title: Text(item['title']),
+                      leading: Icon(item['icon']),
+                      onTap: item['onTap'],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider();
+                  },
+                  itemCount: drawerList.length,
+                ),
               ),
-            ))
+            )),
           ],
         ),
       ),
@@ -277,11 +269,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+// ignore: camel_case_types
 class monthScreen extends StatelessWidget {
   const monthScreen({
-    super.key,
+    Key? key,
     required this.mois,
-  });
+  }) : super(key: key);
 
   final List<String> mois;
 
@@ -326,10 +319,11 @@ class monthScreen extends StatelessWidget {
 
 class elements extends StatelessWidget {
   const elements({
-    super.key,
+    Key? key,
     required this.icon,
     required this.title,
-  });
+  }) : super(key: key);
+
   final String title;
   final Icon icon;
   @override
@@ -352,4 +346,57 @@ class elements extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showLogoutConfirmationDialog(BuildContext context) {
+  Future<void> _logOut() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setBool('connected', false);
+    Navigator.pushReplacementNamed(context, LoginPage.id);
+  }
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Confirmation',
+          style: TextStyle(
+            color: Colors.teal, // Couleur du texte du titre
+          ),
+        ),
+        content: const Text(
+          'Êtes-vous sûr de vouloir vous déconnecter ?',
+          style: TextStyle(
+            color: Colors.black, // Couleur du texte du contenu
+          ),
+        ),
+        backgroundColor:
+            Colors.white, // Couleur de fond de la boîte de dialogue
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0), // Bordure arrondie
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Fermer la boîte de dialogue
+            },
+            child: const Text(
+              'Annuler',
+              style: TextStyle(
+                color: Colors.teal, // Couleur du texte du bouton
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: _logOut,
+            child: Text(
+              'Déconnecter',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

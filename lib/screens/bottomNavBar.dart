@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-import '../login_screen.dart';
 import 'homePage.dart';
 import 'presenceScreen.dart';
 
 class BottomNavBar extends StatefulWidget {
   static const String id = 'navBar';
-  const BottomNavBar({super.key});
+
+  const BottomNavBar({
+    super.key,
+  });
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
@@ -18,9 +20,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
 
   List tabs = [
-    HomePage(
-      userConnect: userConnect,
-    ),
+    HomePage(),
     const PresenceScreen(),
   ];
 
@@ -30,7 +30,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       body: tabs[_selectedIndex],
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       bottomNavigationBar: Container(
-        height: 80,
+        height: 90,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(200),
         ),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:inTime/navigation.dart';
+import 'package:inTime/register_screen.dart';
+import 'package:inTime/screens/bottomNavBar.dart';
+import 'package:inTime/screens/homePage.dart';
 
 import 'app_localizations.dart';
 import 'bdHelper/mongoBdConnect.dart';
 import 'login_screen.dart';
-import 'navigation.dart';
-import 'register_screen.dart';
-import 'screens/bottomNavBar.dart';
-import 'screens/homePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,8 +40,8 @@ class MyApp extends StatelessWidget {
         NavigationPage.id: (context) => NavigationPage(),
         LoginPage.id: (context) => const LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
-        HomePage.id: (context) => const HomePage(userConnect: ''),
         BottomNavBar.id: (context) => const BottomNavBar(),
+        HomePage.id: (context) => const HomePage(),
       },
     );
   }

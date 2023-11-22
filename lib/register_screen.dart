@@ -217,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
       created:
           created, // Utilise la date et l'heure actuelles comme date de création
     );
-    await MongoDatabase.insert(
+    var result = await MongoDatabase.insert(
         data); // Insère les données dans la base de données MongoDB en utilisant la classe MongoDatabase
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("ID inséré: ${_id.toHexString()}")));
