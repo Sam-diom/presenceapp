@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(appBarTheme: AppBarTheme(color: Colors.white)),
+      theme: ThemeData(appBarTheme: const AppBarTheme(color: Colors.white)),
       debugShowCheckedModeBanner: false,
       // ...
       localizationsDelegates: const [
@@ -40,9 +40,8 @@ class MyApp extends StatelessWidget {
         NavigationPage.id: (context) => NavigationPage(),
         LoginPage.id: (context) => const LoginPage(title: 'inTime'),
         RegisterPage.id: (context) => const RegisterPage(title: 'inTime'),
-        BottomNavBar.id:(context) => const BottomNavBar(),
-        HomePage.id: (context) => const HomePage(userConnect: ''),
-        
+        BottomNavBar.id: (context) => const BottomNavBar(),
+        HomePage.id: (context) => const HomePage(),
       },
     );
   }
