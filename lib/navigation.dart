@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:inTime/login_screen.dart';
-import 'package:inTime/screens/bottomNavBar.dart';
-import 'package:inTime/screens/homePage.dart';
-import 'package:inTime/utils/onBoarding.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_screen.dart';
+import 'screens/bottomNavBar.dart';
+import 'utils/onBoarding.dart';
 
 class NavigationPage extends StatefulWidget {
   static const String id = "navigationPage";

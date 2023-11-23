@@ -3,6 +3,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:inTime/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,8 +13,10 @@ import 'package:table_calendar/table_calendar.dart';
 /// Widget de la page d'accueil qui affiche l'écran d'accueil de l'application.
 class HomePage extends StatefulWidget {
   static const String id = 'home';
-  const HomePage({super.key, required this.userConnect});
-  final String userConnect;
+
+  const HomePage({
+    super.key,
+  });
 
   /// L'état est géré par _HomePageState.
   @override
@@ -28,6 +32,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   void _onDaySelected(DateTime Selectedday, DateTime focusDay) {
@@ -210,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     Text(
-                      widget.userConnect,
+                      userConnect,
                       style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ],
@@ -218,6 +228,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Expanded(
+                child: SizedBox(
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
@@ -237,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: drawerList.length,
                 ),
               ),
-            ),
+            )),
           ],
         ),
       ),
@@ -250,7 +261,7 @@ class _HomePageState extends State<HomePage> {
 
     if (returnImage == null) return;
     setState(() {
-      _selectedImage = File(returnImage!.path);
+      _selectedImage = File(returnImage.path);
     });
   }
 }
@@ -275,7 +286,7 @@ class monthScreen extends StatelessWidget {
           );
         },
         itemBuilder: (BuildContext context, int index) {
-          return Container(
+          return SizedBox(
             width: 120,
             height: 50,
             child: ElevatedButton(

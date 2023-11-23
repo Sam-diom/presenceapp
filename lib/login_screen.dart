@@ -11,6 +11,7 @@ import 'bdHelper/mongoBdConnect.dart';
 
 const String registerPageTitle = 'Register UI';
 final _formKey = GlobalKey<FormState>();
+String userConnect = "";
 
 class LoginPage extends StatefulWidget {
   static const String id = 'login';
@@ -23,7 +24,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String userConnect = "";
   String emailConnect = "";
   String passwordConnect = '';
   late TextEditingController controllerEmail;
@@ -55,8 +55,8 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
       await for (var snapshots in MongoDatabase.userCollection.find()) {
-        if ((snapshots["email"] == controllerEmail1.text) &&
-            (snapshots["password"] == controllerPassword1.text)) {
+        if ((snapshots["email"] == controllerEmail1.text.trim()) &&
+            (snapshots["password"] == controllerPassword1.text.trim())) {
           setState(() {
             emailConnect = snapshots["email"];
             passwordConnect = snapshots["password"];
@@ -68,8 +68,8 @@ class _LoginPageState extends State<LoginPage> {
           setState(() {
             emailConnect = snapshots["email"];
           });
-        } else if (snapshots["email"] != controllerEmail1.text &&
-            snapshots["password"] == controllerPassword1.text) {
+        } else if (snapshots["email"] != controllerEmail1.text.trim() &&
+            snapshots["password"] == controllerPassword1.text.trim()) {
           setState(() {
             passwordConnect = snapshots["password"];
           });
@@ -80,21 +80,20 @@ class _LoginPageState extends State<LoginPage> {
       }
       print(emailConnect);
       print(passwordConnect);
-      if (emailConnect == controllerEmail1.text &&
-          passwordConnect == controllerPassword1.text) {
-        _connected();
+      if (emailConnect == controllerEmail1.text.trim() &&
+          passwordConnect == controllerPassword1.text.trim()) {
         Navigator.pop(context);
-        MaterialPageRoute newRoute = MaterialPageRoute(
-            builder: ((context) => BottomNavBar()));
+        MaterialPageRoute newRoute =
+            MaterialPageRoute(builder: ((context) => BottomNavBar()));
         Navigator.pushReplacement(context, newRoute);
         setState(() {
           controllerEmail.text = "";
           controllerPassword.text = "";
         });
-      } else if ((emailConnect == controllerEmail1.text &&
-              passwordConnect != controllerPassword1.text) ||
-          (emailConnect != controllerEmail1.text &&
-              passwordConnect == controllerPassword1.text)) {
+      } else if ((emailConnect == controllerEmail1.text.trim() &&
+              passwordConnect != controllerPassword1.text.trim()) ||
+          (emailConnect != controllerEmail1.text.trim() &&
+              passwordConnect == controllerPassword1.text.trim())) {
         Navigator.pop(context);
         showDialog(
           context: context,
@@ -152,11 +151,11 @@ void main() async {
    */
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations(currentLocale);
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 244, 241, 241),
+      backgroundColor: const Color.fromARGB(255, 244, 241, 241),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -260,7 +259,7 @@ void main() async {
                             color: Colors.teal,
                           ),
                         ),
-                        ),
+                      ),
                     ],
                   ),
                 ],
